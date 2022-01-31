@@ -35,26 +35,25 @@ run5_photosyn_data$run <- sapply(run5_photosyn_data$Date, get_run_number)
 run5_photosyn_data$run <- as.factor(run5_photosyn_data$run)
 
 #assigns temperature as a factor
-run5_photosyn_data$temperature <- as.factor(run5_photosyn_data$Temperature)
+run5_photosyn_data$Temperature <- as.factor(run5_photosyn_data$Temperature)
 
 #assigns treatment as characters from integers then to factors
-run5_photosyn_data$treatment <- as.factor(as.character(run5_photosyn_data$Treatment))
+run5_photosyn_data$Treatment <- as.factor(as.character(run5_photosyn_data$Treatment))
 
 #toggle between the species for output
-hypnea <- subset(run5_photosyn_data, Species == "hm")
-ulva <- subset(run5_photosyn_data, Species == "ul")
+hypnea <- subset(run5_photosyn_data, Species == "hm" & RLC.Day == 9)
+ulva <- subset(run5_photosyn_data, Species == "ul" & RLC.Day == 9)
 
 # run model with interaction between temperature and treatment for rETRmax (is best?)
-run5_photosyn_model <- lmer(formula = rETRmax ~ treatment * temperature + (1 | run), data = hypnea)
-
+#run5_photosyn_model <- lmer(formula = rETRmax ~ Treatment * Temperature + (1 | run), data = ulva)
 #check the performance of the model for each dataset. If collinearity good, proceed with this model
 #if not good, use model with no interaction between the fixed effect variables
-performance::check_model(run5_photosyn_model, data = hypnea)
+#performance::check_model(run5_photosyn_model, data = ulva)
 
 
 #ULVA 
 #run model without interaction
-run5_photosyn_model_noint <- lmer(formula = rETRmax ~ treatment + temperature + (1 | run), data = ulva)
+run5_photosyn_model_noint <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | run), data = ulva)
 
 #make a histogram and residual plots of the data for ulva
 hist(ulva$rETRmax, main = paste("Ulva lactuca rETRmax"), col = "olivedrab3", labels = TRUE)
@@ -65,19 +64,45 @@ qqline(resid(run5_photosyn_model_noint))
 #check the performance of the model
 performance::check_model(run5_photosyn_model_noint)
 
+r.squaredGLMM(run5_photosyn_model_noint)
+summary(run5_photosyn_model_noint)
+
+#run ANOVA and pairwise comparisons
 anova(run5_photosyn_model_noint, type = c("III"), ddf = "Satterthwaite")
-ulva_photosyn_model_aov <- aov(rETRmax ~ treatment + temperature, data = ulva)
-TukeyHSD(ulva_photosyn_model_aov, "treatment", ordered = FALSE)
+ulva_photosyn_model_aov <- aov(rETRmax ~ Treatment + Temperature, data = ulva)
+TukeyHSD(ulva_photosyn_model_aov, "Treatment", ordered = FALSE)
+TukeyHSD(ulva_photosyn_model_aov, "Temperature", ordered = FALSE)
+
+
+plot(allEffects(run5_photosyn_model_noint))
+
+
+#HYPNEA 
+#run model without interaction
+run5_photosyn_model_noint <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | run), data = hypnea)
+
+#make a histogram and residual plots of the data for hypnea
+hist(ulva$rETRmax, main = paste("Hypnea musciformis rETRmax"), col = "maroon", labels = TRUE)
+plot(resid(run5_photosyn_model_noint) ~ fitted(run5_photosyn_model_noint))
+qqnorm(resid(run5_photosyn_model_noint))
+qqline(resid(run5_photosyn_model_noint))
+
+#check the performance of the model
+performance::check_model(run5_photosyn_model_noint)
 
 r.squaredGLMM(run5_photosyn_model_noint)
 summary(run5_photosyn_model_noint)
 
-
-
-
-
+#run ANOVA and pairwise comparisons
+anova(run5_photosyn_model_noint, type = c("III"), ddf = "Satterthwaite")
+hypnea_photosyn_model_aov <- aov(rETRmax ~ Treatment + Temperature, data = hypnea)
+TukeyHSD(hypnea_photosyn_model_aov, "Temperature", ordered = FALSE)
 
 
 
 plot(allEffects(run5_photosyn_model_noint))
+
+
+
+
 

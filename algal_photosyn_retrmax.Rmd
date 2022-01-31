@@ -1,0 +1,162 @@
+---
+title: "Ulva and Hypnea PHOTOSYNTHESIS and Growth Run5 - Sept-Nov 2021"
+author: "Angela Richards Donà"
+date: "1/31/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Run5 rETRmax Analysis, Script Chunks, and Plots
+
+This is the analysis of the final run of the Ulva and Hypnea salinity and nutrient experiments 
+conducted on the lanai in St. John 616. These experiments incorporated three temperature levels.
+Modeal was run on parameter rETRmax
+
+Packages loaded:
+
+```{r, message=FALSE}
+library(lme4)
+library(lmerTest)
+library(effects)
+library(car)
+library(MuMIn)
+library (dplyr)
+library(emmeans)
+library(DHARMa)
+library(performance)
+library(patchwork)
+```
+
+## Load and prepare the dataset
+Open the photosynthesis dataset that was created in R using the package "Phytotools"
+Several parameters are available but are not independent of one another thus
+for this analysis, we chose to use rETRmax to represent the results for photosynthetic efficiency
+
+```{r}
+run5_photosyn_data <- read.csv("data/run5_hyp_ulv_final_alpha_ek_rounded.csv")
+```
+
+# Write function that returns the run number based on the range of dates input
+
+```{r}
+get_run_number <- function(d) {
+  # returns the run number based on the input date  
+  run = NA
+  if ("2021-09-20" <= d && d <= "2021-09-29") {
+    run <- 1
+  } else if ("2021-09-30" <= d && d <= "2021-10-09") {
+    run <- 2
+  } else if ("2021-10-11" <= d && d <= "2021-10-29") {
+    run <- 3
+  } else if ("2021-11-01" <= d && d <= "2021-11-12") {
+    run <- 4
+  } else {
+    print("The date is %s not in a recognized range", d)
+  }
+  run
+}
+```
+
+# Make new column adding run to the dataset
+```{r run5_photosyn_data}
+run5_photosyn_data$run <- sapply(run5_photosyn_data$Date, get_run_number)
+run5_photosyn_data$run <- as.factor(run5_photosyn_data$run)
+```
+
+# Change levels to factors
+
+```{r}
+run5_photosyn_data$Temperature <- as.factor(run5_photosyn_data$Temperature)
+run5_photosyn_data$Treatment <- as.factor(as.character(run5_photosyn_data$Treatment))
+```
+
+
+# Make a subset of the data to isolate the species and use only Day 9 (final day) results
+
+```{r}
+hypnea <- subset(run5_photosyn_data, Species == "hm" & RLC.Day == 9)
+ulva <- subset(run5_photosyn_data, Species == "ul" & RLC.Day == 9)
+```
+
+# ULVA 
+# Run model without interaction between the dependent variables
+```{r ulva}
+run5_photosyn_model_noint <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | run), data = ulva)
+```
+
+# Make a histogram and Normal and residual plots of the data for ulva
+
+```{r fig.width=5}
+hist(ulva$rETRmax, main = paste("Ulva lactuca rETRmax"), col = "olivedrab3", labels = TRUE)
+plot(resid(run5_photosyn_model_noint) ~ fitted(run5_photosyn_model_noint))
+qqnorm(resid(run5_photosyn_model_noint))
+qqline(resid(run5_photosyn_model_noint))
+```
+
+# Check the performance of the model
+
+```{r fig.height=8}
+performance::check_model(run5_photosyn_model_noint)
+```
+
+```{r}
+r.squaredGLMM(run5_photosyn_model_noint)
+summary(run5_photosyn_model_noint)
+```
+
+#run ANOVA and pairwise comparisons (sig differences for both random variables)
+```{r}
+anova(run5_photosyn_model_noint, type = c("III"), ddf = "Satterthwaite")
+ulva_photosyn_model_aov <- aov(rETRmax ~ Treatment + Temperature, data = ulva)
+TukeyHSD(ulva_photosyn_model_aov, "Treatment", ordered = FALSE)
+TukeyHSD(ulva_photosyn_model_aov, "Temperature", ordered = FALSE)
+```
+
+# Plot the random effects for Ulva
+
+```{r warning=FALSE}
+plot(allEffects(run5_photosyn_model_noint))
+```
+
+# HYPNEA 
+# Run model without interaction between the dependent variables
+```{r hypnea}
+run5_photosyn_model_noint <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | run), 
+                                  data = hypnea)
+```
+
+# Make a histogram and Normal and residual plots of the data for hypnea
+
+```{r run5_growth_model_noint, fig.width=5}
+hist(hypnea$rETRmax, main = paste("Hypnea musciformis rETRmax"), col = "maroon", labels = TRUE)
+plot(resid(run5_photosyn_model_noint) ~ fitted(run5_photosyn_model_noint))
+qqnorm(resid(run5_photosyn_model_noint))
+qqline(resid(run5_photosyn_model_noint))
+```
+
+# Check the performance of the model
+
+```{r fig.height=8}
+performance::check_model(run5_photosyn_model_noint)
+```
+
+```{r}
+r.squaredGLMM(run5_photosyn_model_noint)
+summary(run5_photosyn_model_noint)
+```
+
+#run ANOVA and pairwise comparisons (only significant diff for Temperature)
+```{r}
+anova(run5_photosyn_model_noint, type = c("III"), ddf = "Satterthwaite")
+hypnea_photosyn_model_aov <- aov(rETRmax ~ Treatment + Temperature, data = hypnea)
+TukeyHSD(hypnea_photosyn_model_aov, "Temperature", ordered = FALSE)
+```
+
+# Plot the random effects for Hypnea
+
+```{r warning=FALSE}
+plot(allEffects(run5_photosyn_model_noint))
+```
