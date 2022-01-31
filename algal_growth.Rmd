@@ -13,9 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is the analysis of the final run of the Ulva and Hypnea salinity and nutrient experiments conducted on the lanai in St. John 616. 
 
-These are the packages
+Packages loaded:
 
-```{r}
+```{r, message=FALSE}
 library(lme4)
 library(lmerTest)
 library(effects)
@@ -74,54 +74,81 @@ run5_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temp
                                 data = ulva)
 ```
 
-#make a histogram of the data for ulva
+#make a histogram of the data for Ulva
 
-```{r run5_growth_model_noint}
+```{r run5_growth_model_noint, fig.width=5}
 hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"),
      col = "olivedrab3", labels = TRUE)
 ```
+```{r}
+plot(resid(run5_growth_model_noint) ~ fitted(run5_growth_model_noint))
+qqnorm(resid(run5_growth_model_noint))
+qqline(resid(run5_growth_model_noint))
+```
+
+## Check the performance of the model for Ulva
+```{r, fig.height=8}
+performance::check_model(run5_growth_model_noint)
+```
+These outputs show the model is acceptable
+
 
 ```{r}
+anova(run5_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
 ulva_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = ulva)
 TukeyHSD(ulva_growth_model_aov, "treatment", ordered = FALSE)
 ```
 
-# Check the performance of the model for each dataset: ulva and hypnea
 ```{r}
-performance::check_model(run5_growth_model_noint)
 r.squaredGLMM(run5_growth_model_noint)
 summary(run5_growth_model_noint)
-anova(run5_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
 ```
-# Plots
+
+# Effects Plots
 ```{r}
 plot(allEffects(run5_growth_model_noint))
+
+
+```
+
+
+
+# HYPNEA 
+```{r hypnea}
+run5_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | run),
+                                data = hypnea)
+```
+
+## Check the performance of the model for Hypnea
+```{r, fig.height=8}
+performance::check_model(run5_growth_model_noint)
+```
+These outputs show the model is acceptable for the data
+
+```{r, fig.width=5}
+hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), 
+     col = "maroon", labels = TRUE)
+```
+```{r}
 plot(resid(run5_growth_model_noint) ~ fitted(run5_growth_model_noint))
 qqnorm(resid(run5_growth_model_noint))
 qqline(resid(run5_growth_model_noint))
-
 ```
-# HYPNEA 
-# same as above
-```{r hypnea}
-run5_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | run), data = hypnea)
-hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), col = "maroon", labels = TRUE)
+
+```{r}
+anova(run5_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
 hypnea_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = hypnea)
 TukeyHSD(hypnea_growth_model_aov, "treatment", ordered = FALSE)
 ```
 
-# Check the performance of the model for each dataset: ulva and hypnea
 ```{r}
-performance::check_model(run5_growth_model_noint)
 r.squaredGLMM(run5_growth_model_noint)
 summary(run5_growth_model_noint)
-anova(run5_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
+
 ```
-# Plots
+# Effects Plots
 ```{r}
 plot(allEffects(run5_growth_model_noint))
-plot(resid(run5_growth_model_noint) ~ fitted(run5_growth_model_noint))
-qqnorm(resid(run5_growth_model_noint))
-qqline(resid(run5_growth_model_noint))
+
 
 ```
