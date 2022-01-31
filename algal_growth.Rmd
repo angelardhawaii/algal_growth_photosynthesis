@@ -1,5 +1,5 @@
 ---
-title: "Ulva and Hypnea Photosynthesis and Growth Run5 - Sept-Nov 2021"
+title: "Ulva and Hypnea Photosynthesis and GROWTH Run5 - Sept-Nov 2021"
 author: "Angela Richards Donà"
 date: "1/28/2022"
 output: pdf_document
@@ -9,9 +9,10 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Run5 Analysis, Script Chunks, and Plots
+## Run5 GROWTH RATE Analysis, Script Chunks, and Plots
 
-This is the analysis of the final run of the Ulva and Hypnea salinity and nutrient experiments conducted on the lanai in St. John 616. 
+This is the analysis of the final run of the Ulva and Hypnea salinity and nutrient experiments 
+conducted on the lanai in St. John 616. These experiments incorporated three temperature levels.
 
 Packages loaded:
 
@@ -41,7 +42,8 @@ run5_growth$growth_rate_percent <-
   (run5_growth$final.weight - run5_growth$Inital.weight) / run5_growth$Inital.weight * 100
 ```
 
-Also make a new column for daily growth rate from 8 day study (steady growth rate assumed rather than exponential), which may or may not be used
+Also make a new column for daily growth rate from 8 day study (steady growth rate assumed rather than exponential), 
+which may or may not be used
 
 ```{r}
 run5_growth$steady_growth_daily <- run5_growth$growth_rate_percent / 8
@@ -59,6 +61,7 @@ run5_growth$treatment <- as.factor(as.character(run5_growth$treatment))
 
 ```
 
+# Create subset of the data to isolate the species
 ```{r}
 hypnea <- subset(run5_growth, Species == "Hm")
 ulva <- subset(run5_growth, Species == "Ul")
@@ -67,7 +70,7 @@ ulva <- subset(run5_growth, Species == "Ul")
 # Run the model
 
 # ULVA 
-# run model without interaction (0 in model permits display of four levels of treatments - no intercept)
+# run model without interaction since interaction caused collinearity issues
 
 ```{r ulva}
 run5_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | run), 
