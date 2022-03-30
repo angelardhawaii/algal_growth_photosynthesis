@@ -11,7 +11,7 @@ library(performance)
 library(patchwork)
 
 #open weight dataset and make columns for growth rate from initial and final weights
-run5_growth <- read.csv("/Users/Angela/Library/Mobile Documents/com~apple~CloudDocs/research_limu/run5_hyp_ulv_temp/final_temperature_run1-4/final_data_files/run5_growth_all_012422.csv")
+run5_growth <- read.csv("/Users/Angela/Library/Mobile Documents/com~apple~CloudDocs/research_limu/run5_hyp_ulv_temp/final_temperature_run1-4/final_data_files/run5_growth_all_032422.csv")
 
 #make a new column for weight change (difference final from initial)
 run5_growth$growth_rate_percent <- (run5_growth$final.weight - run5_growth$Inital.weight) / run5_growth$Inital.weight * 100
@@ -20,23 +20,26 @@ run5_growth$growth_rate_percent <- (run5_growth$final.weight - run5_growth$Inita
 run5_growth$steady_growth_daily <- run5_growth$growth_rate_percent / 8
 
 #make a new column that keeps only the numerical values (effectively removes the C in temperatures for consistency)
-#temp_clean <- as.factor(substr(run5_growth$temperature, 1, 2))
+run5_growth$temp_clean <- as.factor(substr(run5_growth$temperature, 1, 2))
 
 #assigns temperature as a factor
-run5_growth$temperature <- as.factor(run5_growth$temperature)
+run5_growth$temperature <- as.factor(run5_growth$temp_clean)
 
-#make a new column that changes treatment as integers to characters (note similar column name)
+#assigns treatment as characters from integers then to factors
 run5_growth$treatment <- as.factor(as.character(run5_growth$treatment))
 
-#make new column that changes run to character
+#assign run as a factor
 run5_growth$run <- as.factor(run5_growth$run)
+
+# assign lunar phase as factor
+run5_growth$lunar.phase <- as.factor(run5_growth$lunar.phase)
 
 #toggle between the species for output
 hypnea <- subset(run5_growth, Species == "Hm")
 ulva <- subset(run5_growth, Species == "Ul")
 
 # run model with interaction between temperature and treatment 
-#run5_growth_model <- lmer(formula = growth_rate_percent ~ treatments * temp_clean + (1 | consecutive_runs), data = hypnea)
+#run5_growth_model <- lmer(formula = growth_rate_percent ~ treatments * temp_clean + (1 | run), data = hypnea)
 
 #ULVA 
 #run model without interaction (0 in model permits display of four levels of treatments - no intercept)
