@@ -1,0 +1,1039 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{Mixed Model for Photosynthesis in Ulva lactuca}
+\author{Angela Richards Donà}
+\date{5/17/2022}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Mixed Model for Photosynthesis in Ulva lactuca},
+  pdfauthor={Angela Richards Donà},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{section}{%
+\section{}\label{section}}
+
+\hypertarget{run-5.6-photosynthesis-analysis-script-chunks-and-plots}{%
+\subsection{Run 5.6 PHOTOSYNTHESIS Analysis, Script Chunks, and
+Plots}\label{run-5.6-photosynthesis-analysis-script-chunks-and-plots}}
+
+This is the analysis of the final run of the Ulva lactuca salinity and
+nutrient experiments conducted on the lanai in St.~John 616. These
+experiments incorporated four paired salinity and nutrient levels with
+three temperature levels. Each run produced an n = 2 and was repeated
+initially 8 times for a total of n = 16. Data gaps were identified and
+filled by early March 2022. This output reflects all data totaling five
+treatments for Ulva lactuca.
+
+Packages loaded:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lme4)}
+\FunctionTok{library}\NormalTok{(lmerTest)}
+\FunctionTok{library}\NormalTok{(effects)}
+\FunctionTok{library}\NormalTok{(car)}
+\FunctionTok{library}\NormalTok{(MuMIn)}
+\FunctionTok{library}\NormalTok{ (dplyr)}
+\FunctionTok{library}\NormalTok{(emmeans)}
+\FunctionTok{library}\NormalTok{(DHARMa)}
+\FunctionTok{library}\NormalTok{(performance)}
+\FunctionTok{library}\NormalTok{(patchwork)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(ggpubr)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{load-and-prepare-the-dataset}{%
+\subsection{Load and prepare the
+dataset}\label{load-and-prepare-the-dataset}}
+
+Open the output dataset generated by the
+ps\_script\_clean\_to\_ek\_alpha.R script in the phytotools\_alpha\_ek
+project
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data\_input/run5{-}6\_ek\_alpha.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{assign-run-as-a-factor}{%
+\subsection{Assign run as a factor}\label{assign-run-as-a-factor}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_data}\SpecialCharTok{$}\NormalTok{Run }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(run5\_6\_photosyn\_data}\SpecialCharTok{$}\NormalTok{Run)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{assign-temperature-as-a-factor}{%
+\subsection{Assign temperature as a
+factor}\label{assign-temperature-as-a-factor}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_data}\SpecialCharTok{$}\NormalTok{Temperature }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(run5\_6\_photosyn\_data}\SpecialCharTok{$}\NormalTok{Temp...C.)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{assign-treatment-as-characters-from-integers-then-to-factors}{%
+\subsection{Assign treatment as characters from integers then to
+factors}\label{assign-treatment-as-characters-from-integers-then-to-factors}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_data}\SpecialCharTok{$}\NormalTok{Treatment }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(run5\_6\_photosyn\_data}\SpecialCharTok{$}\NormalTok{Treatment))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{subset-the-data-and-toggle-between-the-species-for-output.-use-day-9-for-final-analysis-only}{%
+\subsection{Subset the data and toggle between the species for output.
+Use Day 9 for final analysis
+ONLY}\label{subset-the-data-and-toggle-between-the-species-for-output.-use-day-9-for-final-analysis-only}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(run5\_6\_photosyn\_data, Species }\SpecialCharTok{==} \StringTok{"ul"} \SpecialCharTok{\&}\NormalTok{ RLC.Day }\SpecialCharTok{==} \DecValTok{9}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{add-a-column-for-growth-rate-from-growth-rate-dataset-to-the-alredy-subsetted-ulva-data-frame}{%
+\section{Add a column for growth rate from growth rate dataset to the
+alredy subsetted ulva data
+frame}\label{add-a-column-for-growth-rate-from-growth-rate-dataset-to-the-alredy-subsetted-ulva-data-frame}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{growth\_rate }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"/Users/Angela/src/work/limu/algal\_growth\_photosynthesis/data\_input/run5{-}6\_growth\_all\_042922.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gr\_ulva }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(growth\_rate, Species }\SpecialCharTok{==} \StringTok{"Ul"}\NormalTok{)}
+\NormalTok{ulva}\SpecialCharTok{$}\NormalTok{growth\_rate }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{((gr\_ulva}\SpecialCharTok{$}\NormalTok{final.weight }\SpecialCharTok{{-}}\NormalTok{ gr\_ulva}\SpecialCharTok{$}\NormalTok{Initial.weight) }\SpecialCharTok{/}\NormalTok{ gr\_ulva}\SpecialCharTok{$}\NormalTok{Initial.weight }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\AttributeTok{digits =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{retrmax-run-the-model}{%
+\section{rETRmax -- Run the model}\label{retrmax-run-the-model}}
+
+Run model for rETRmax with two fixed effect variables and three random
+effects variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_model\_noint }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ rETRmax }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Temperature }
+                                    \SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ Run) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ Plant.ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ RLC.Order), }
+                                    \AttributeTok{data =}\NormalTok{ ulva)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{retrmax-make-a-histogram-and-residual-plots-of-the-data}{%
+\subsection{rETRmax -- Make a histogram and residual plots of the
+data}\label{retrmax-make-a-histogram-and-residual-plots-of-the-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(ulva}\SpecialCharTok{$}\NormalTok{rETRmax, }\AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Ulva lactuca rETRmax"}\NormalTok{), }\AttributeTok{col =} \StringTok{"darkolivegreen2"}\NormalTok{, }\AttributeTok{labels =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/run5_6_photosyn_model_noint-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{fitted}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/run5_6_photosyn_model_noint-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/run5_6_photosyn_model_noint-3.pdf}
+
+\hypertarget{retrmax-check-the-performance-of-the-model}{%
+\section{rETRmax -- Check the performance of the
+model}\label{retrmax-check-the-performance-of-the-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_model}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-8-1.pdf}
+These outputs show the model is acceptable
+
+\hypertarget{retrmax-check-r2-for-model-fit-and-print-the-model-statistics-summary}{%
+\section{rETRmax -- Check r2 for model fit and print the model
+statistics
+summary}\label{retrmax-check-r2-for-model-fit-and-print-the-model-statistics-summary}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{r.squaredGLMM}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: 'r.squaredGLMM' now calculates a revised statistic. See the help page.
+\end{verbatim}
+
+\begin{verbatim}
+##            R2m       R2c
+## [1,] 0.5882889 0.6835032
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) +  
+##     (1 | RLC.Order)
+##    Data: ulva
+## 
+## REML criterion at convergence: 1827.1
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.8253 -0.6047  0.0845  0.5200  3.4082 
+## 
+## Random effects:
+##  Groups    Name        Variance Std.Dev.
+##  Plant.ID  (Intercept)  22.155   4.707  
+##  RLC.Order (Intercept)   5.044   2.246  
+##  Run       (Intercept)   6.305   2.511  
+##  Residual              111.367  10.553  
+## Number of obs: 240, groups:  Plant.ID, 95; RLC.Order, 6; Run, 5
+## 
+## Fixed effects:
+##               Estimate Std. Error     df t value Pr(>|t|)    
+## (Intercept)     34.819      3.437  3.609  10.130 0.000887 ***
+## Treatment1      20.641      3.669  3.083   5.626 0.010318 *  
+## Treatment2      21.727      3.669  3.083   5.922 0.008906 ** 
+## Treatment3      37.848      3.669  3.083  10.317 0.001724 ** 
+## Treatment4      39.172      3.669  3.083  10.677 0.001555 ** 
+## Temperature27   -4.430      2.504 30.316  -1.770 0.086835 .  
+## Temperature30   -2.157      2.293 65.525  -0.941 0.350296    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) Trtmn1 Trtmn2 Trtmn3 Trtmn4 Tmpr27
+## Treatment1  -0.721                                   
+## Treatment2  -0.721  0.828                            
+## Treatment3  -0.721  0.828  0.828                     
+## Treatment4  -0.721  0.828  0.828  0.828              
+## Temperatr27 -0.348  0.003  0.003  0.003  0.003       
+## Temperatr30 -0.338  0.000  0.000  0.000  0.000  0.475
+\end{verbatim}
+
+\hypertarget{retrmax-run-an-anova-and-pairwise-comparisons-based-on-anova-results}{%
+\section{rETRmax -- Run an ANOVA and pairwise comparisons based on ANOVA
+results}\label{retrmax-run-an-anova-and-pairwise-comparisons-based-on-anova-results}}
+
+Results for temperature are non-significant, thus no pairwise
+comparisons for this
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{anova}\NormalTok{(run5\_6\_photosyn\_model\_noint, }\AttributeTok{type =} \FunctionTok{c}\NormalTok{(}\StringTok{"III"}\NormalTok{), }\AttributeTok{ddf =} \StringTok{"Satterthwaite"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Type III Analysis of Variance Table with Satterthwaite's method
+##              Sum Sq Mean Sq NumDF  DenDF F value   Pr(>F)   
+## Treatment   22945.7  5736.4     4  3.351 51.5093 0.002597 **
+## Temperature   350.2   175.1     2 43.268  1.5723 0.219192   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva\_photosyn\_model\_aov }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(rETRmax }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Temperature, }\AttributeTok{data =}\NormalTok{ ulva)}
+\FunctionTok{TukeyHSD}\NormalTok{(ulva\_photosyn\_model\_aov, }\StringTok{"Treatment"}\NormalTok{, }\AttributeTok{ordered =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = rETRmax ~ Treatment + Temperature, data = ulva)
+## 
+## $Treatment
+##          diff       lwr       upr     p adj
+## 1-0 20.610833 13.932211 27.289455 0.0000000
+## 2-0 21.696250 15.017628 28.374872 0.0000000
+## 3-0 37.818125 31.139503 44.496747 0.0000000
+## 4-0 39.141667 32.463045 45.820289 0.0000000
+## 2-1  1.085417 -5.593205  7.764039 0.9917098
+## 3-1 17.207292 10.528670 23.885914 0.0000000
+## 4-1 18.530833 11.852211 25.209455 0.0000000
+## 3-2 16.121875  9.443253 22.800497 0.0000000
+## 4-2 17.445417 10.766795 24.124039 0.0000000
+## 4-3  1.323542 -5.355080  8.002164 0.9824820
+\end{verbatim}
+
+\hypertarget{retrmax-plot-the-results}{%
+\section{rETRmax -- Plot the results}\label{retrmax-plot-the-results}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{allEffects}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-11-1.pdf}
+\# Plot a regression between the photosynthetic independent variables of
+interest and growth rate
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva\_growth\_etr\_graph }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(ulva, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{rETRmax, }\AttributeTok{y=}\NormalTok{growth\_rate)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{col =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Ulva lactuca rETRmax vs Growth Rate"}\NormalTok{, }\AttributeTok{x =} \StringTok{"rETRmax (μmols electrons m{-}2 s{-}1)"}\NormalTok{, }
+       \AttributeTok{y =} \StringTok{"growth rate (\%)"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{stat\_regline\_equation}\NormalTok{(}\AttributeTok{label.x =} \DecValTok{25}\NormalTok{, }\AttributeTok{label.y =} \DecValTok{165}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{stat\_cor}\NormalTok{()}
+\NormalTok{ulva\_growth\_etr\_graph}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'rETRmax (μmols electrons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\hypertarget{notes}{%
+\subsection{Notes}\label{notes}}
+
+Temperature did not have a significant effect on the outcome for rETRmax
+but it did for Ek and alpha. alpha histogram is NOT Normal, probably not
+a good fit for this analysis
+
+\hypertarget{ek-run-the-model}{%
+\section{Ek -- Run the model}\label{ek-run-the-model}}
+
+Run model for minimum saturating irradiance (Ek) with two fixed effect
+variables and three random effects variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_model\_noint }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ ek}\FloatTok{.1} \SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Temperature }
+                                    \SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ Run) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ Plant.ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ RLC.Order), }
+                                    \AttributeTok{data =}\NormalTok{ ulva)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ek-make-a-histogram-and-residual-plots-of-the-data-for-ulva}{%
+\section{Ek -- Make a histogram and residual plots of the data for
+ulva}\label{ek-make-a-histogram-and-residual-plots-of-the-data-for-ulva}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(ulva}\SpecialCharTok{$}\NormalTok{ek}\FloatTok{.1}\NormalTok{, }\AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Ulva lactuca Ek"}\NormalTok{), }\AttributeTok{col =} \StringTok{"darkolivegreen3"}\NormalTok{, }\AttributeTok{labels =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{fitted}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-14-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-14-3.pdf}
+
+\hypertarget{ek-check-the-performance-of-the-model}{%
+\section{Ek -- Check the performance of the
+model}\label{ek-check-the-performance-of-the-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_model}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\hypertarget{ek-check-r2-for-model-fit-and-print-the-model-statistics-summary}{%
+\section{Ek -- Check r2 for model fit and print the model statistics
+summary}\label{ek-check-r2-for-model-fit-and-print-the-model-statistics-summary}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{r.squaredGLMM}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            R2m       R2c
+## [1,] 0.5867698 0.7012116
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: ek.1 ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) +  
+##     (1 | RLC.Order)
+##    Data: ulva
+## 
+## REML criterion at convergence: 2102.1
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -3.04017 -0.53517 -0.01583  0.51382  2.98662 
+## 
+## Random effects:
+##  Groups    Name        Variance Std.Dev.
+##  Plant.ID  (Intercept)  66.38    8.147  
+##  RLC.Order (Intercept)  10.92    3.304  
+##  Run       (Intercept)  61.94    7.870  
+##  Residual              363.52   19.066  
+## Number of obs: 240, groups:  Plant.ID, 95; RLC.Order, 6; Run, 5
+## 
+## Fixed effects:
+##               Estimate Std. Error     df t value Pr(>|t|)   
+## (Intercept)     16.796      8.856  3.225   1.897  0.14770   
+## Treatment1      30.241      9.766  3.068   3.096  0.05187 . 
+## Treatment2      40.947      9.766  3.068   4.193  0.02368 * 
+## Treatment3      68.624      9.766  3.068   7.027  0.00550 **
+## Treatment4      71.137      9.766  3.068   7.284  0.00495 **
+## Temperature27   -9.826      4.311 29.565  -2.279  0.03004 * 
+## Temperature30   -8.349      4.020 68.996  -2.077  0.04154 * 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) Trtmn1 Trtmn2 Trtmn3 Trtmn4 Tmpr27
+## Treatment1  -0.820                                   
+## Treatment2  -0.820  0.921                            
+## Treatment3  -0.820  0.921  0.921                     
+## Treatment4  -0.820  0.921  0.921  0.921              
+## Temperatr27 -0.235  0.002  0.002  0.002  0.002       
+## Temperatr30 -0.229  0.000  0.000  0.000  0.000  0.480
+\end{verbatim}
+
+\hypertarget{ek-run-an-anova-and-pairwise-comparisons-based-on-anova-results}{%
+\section{Ek -- Run an ANOVA and pairwise comparisons based on ANOVA
+results}\label{ek-run-an-anova-and-pairwise-comparisons-based-on-anova-results}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{anova}\NormalTok{(run5\_6\_photosyn\_model\_noint, }\AttributeTok{type =} \FunctionTok{c}\NormalTok{(}\StringTok{"III"}\NormalTok{), }\AttributeTok{ddf =} \StringTok{"Satterthwaite"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Type III Analysis of Variance Table with Satterthwaite's method
+##             Sum Sq Mean Sq NumDF  DenDF F value    Pr(>F)    
+## Treatment    70601 17650.2     4  4.821 48.5538 0.0004271 ***
+## Temperature   2345  1172.6     2 42.884  3.2256 0.0495474 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva\_photosyn\_model\_aov }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(ek}\FloatTok{.1} \SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Temperature, }\AttributeTok{data =}\NormalTok{ ulva)}
+\FunctionTok{TukeyHSD}\NormalTok{(ulva\_photosyn\_model\_aov, }\StringTok{"Treatment"}\NormalTok{, }\AttributeTok{ordered =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = ek.1 ~ Treatment + Temperature, data = ulva)
+## 
+## $Treatment
+##         diff       lwr      upr     p adj
+## 1-0 30.19583 17.895251 42.49642 0.0000000
+## 2-0 40.90208 28.601501 53.20267 0.0000000
+## 3-0 68.57917 56.278584 80.87975 0.0000000
+## 4-0 71.09167 58.791084 83.39225 0.0000000
+## 2-1 10.70625 -1.594333 23.00683 0.1208714
+## 3-1 38.38333 26.082751 50.68392 0.0000000
+## 4-1 40.89583 28.595251 53.19642 0.0000000
+## 3-2 27.67708 15.376501 39.97767 0.0000000
+## 4-2 30.18958 17.889001 42.49017 0.0000000
+## 4-3  2.51250 -9.788083 14.81308 0.9803988
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{TukeyHSD}\NormalTok{(ulva\_photosyn\_model\_aov, }\StringTok{"Temperature"}\NormalTok{, }\AttributeTok{ordered =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = ek.1 ~ Treatment + Temperature, data = ulva)
+## 
+## $Temperature
+##          diff       lwr        upr     p adj
+## 27-20 -9.9375 -18.11226 -1.7627403 0.0125118
+## 30-20 -9.0075 -17.18226 -0.8327403 0.0267837
+## 30-27  0.9300  -7.24476  9.1047597 0.9610888
+\end{verbatim}
+
+\hypertarget{ek-plot-the-results}{%
+\section{Ek -- Plot the results}\label{ek-plot-the-results}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{allEffects}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva\_growth\_ek\_graph }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(ulva, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{ek}\FloatTok{.1}\NormalTok{, }\AttributeTok{y=}\NormalTok{growth\_rate)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{col =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Ulva lactuca Ek vs Growth Rate"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Ek (μmols photons m{-}2 s{-}1)"}\NormalTok{, }\AttributeTok{y =} \StringTok{"growth rate (\%)"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{stat\_regline\_equation}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_cor}\NormalTok{(}\AttributeTok{label.y =} \DecValTok{160}\NormalTok{)}
+\NormalTok{ulva\_growth\_ek\_graph}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <ce>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+## conversion failure on 'Ek (μmols photons m-2 s-1)' in 'mbcsToSbcs': dot
+## substituted for <bc>
+\end{verbatim}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\hypertarget{alpha-run-the-model}{%
+\section{alpha -- Run the model}\label{alpha-run-the-model}}
+
+Run model for alpha withtwo fixed effect variables and three random
+effects variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{run5\_6\_photosyn\_model\_noint }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ alpha}\FloatTok{.1} \SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Temperature }
+                                    \SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ Run) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ Plant.ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ RLC.Order), }
+                                    \AttributeTok{data =}\NormalTok{ ulva)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## boundary (singular) fit: see ?isSingular
+\end{verbatim}
+
+\hypertarget{alpha-make-a-histogram-and-residual-plots-of-the-data-for-ulva}{%
+\section{alpha -- Make a histogram and residual plots of the data for
+ulva}\label{alpha-make-a-histogram-and-residual-plots-of-the-data-for-ulva}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(ulva}\SpecialCharTok{$}\NormalTok{alpha}\FloatTok{.1}\NormalTok{, }\AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Ulva lactuca alpha"}\NormalTok{), }\AttributeTok{col =} \StringTok{"darkolivegreen3"}\NormalTok{, }\AttributeTok{labels =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{fitted}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-21-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{resid}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-21-3.pdf}
+
+\hypertarget{alpha-check-the-performance-of-the-model}{%
+\section{alpha -- Check the performance of the
+model}\label{alpha-check-the-performance-of-the-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_model}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\hypertarget{alpha-check-r2-for-model-fit-and-print-the-model-statistics-summary}{%
+\section{alpha -- Check r2 for model fit and print the model statistics
+summary}\label{alpha-check-r2-for-model-fit-and-print-the-model-statistics-summary}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{r.squaredGLMM}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            R2m       R2c
+## [1,] 0.4524773 0.5264424
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(run5\_6\_photosyn\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: alpha.1 ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) +  
+##     (1 | RLC.Order)
+##    Data: ulva
+## 
+## REML criterion at convergence: 453
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.5531 -0.5754 -0.1204  0.3199  3.6187 
+## 
+## Random effects:
+##  Groups    Name        Variance Std.Dev.
+##  Plant.ID  (Intercept) 0.01181  0.1087  
+##  RLC.Order (Intercept) 0.00000  0.0000  
+##  Run       (Intercept) 0.04206  0.2051  
+##  Residual              0.34486  0.5872  
+## Number of obs: 240, groups:  Plant.ID, 95; RLC.Order, 6; Run, 5
+## 
+## Fixed effects:
+##               Estimate Std. Error       df t value Pr(>|t|)   
+## (Intercept)    2.15229    0.22956  3.28704   9.376  0.00175 **
+## Treatment1    -0.84972    0.25969  3.44592  -3.272  0.03822 * 
+## Treatment2    -1.11836    0.25969  3.44592  -4.306  0.01731 * 
+## Treatment3    -1.48303    0.25969  3.44592  -5.711  0.00723 **
+## Treatment4    -1.52872    0.25969  3.44592  -5.887  0.00656 **
+## Temperature27  0.31167    0.09830 42.27696   3.171  0.00283 **
+## Temperature30  0.25233    0.09804 46.29620   2.574  0.01332 * 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) Trtmn1 Trtmn2 Trtmn3 Trtmn4 Tmpr27
+## Treatment1  -0.830                                   
+## Treatment2  -0.830  0.893                            
+## Treatment3  -0.830  0.893  0.893                     
+## Treatment4  -0.830  0.893  0.893  0.893              
+## Temperatr27 -0.214  0.001  0.001  0.001  0.001       
+## Temperatr30 -0.214  0.000  0.000  0.000  0.000  0.499
+## optimizer (nloptwrap) convergence code: 0 (OK)
+## boundary (singular) fit: see ?isSingular
+\end{verbatim}
+
+\hypertarget{alpha-run-an-anova-and-pairwise-comparisons-based-on-anova-results}{%
+\section{alpha -- Run an ANOVA and pairwise comparisons based on ANOVA
+results}\label{alpha-run-an-anova-and-pairwise-comparisons-based-on-anova-results}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{anova}\NormalTok{(run5\_6\_photosyn\_model\_noint, }\AttributeTok{type =} \FunctionTok{c}\NormalTok{(}\StringTok{"III"}\NormalTok{), }\AttributeTok{ddf =} \StringTok{"Satterthwaite"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Type III Analysis of Variance Table with Satterthwaite's method
+##              Sum Sq Mean Sq NumDF  DenDF F value   Pr(>F)   
+## Treatment   23.4668  5.8667     4  5.598 17.0120 0.002643 **
+## Temperature  3.9191  1.9596     2 43.552  5.6822 0.006416 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva\_photosyn\_model\_aov }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(alpha}\FloatTok{.1} \SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Temperature, }\AttributeTok{data =}\NormalTok{ ulva)}
+\FunctionTok{TukeyHSD}\NormalTok{(ulva\_photosyn\_model\_aov, }\StringTok{"Treatment"}\NormalTok{, }\AttributeTok{ordered =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = alpha.1 ~ Treatment + Temperature, data = ulva)
+## 
+## $Treatment
+##           diff        lwr         upr     p adj
+## 1-0 -0.8506250 -1.1973752 -0.50387476 0.0000000
+## 2-0 -1.1192708 -1.4660211 -0.77252059 0.0000000
+## 3-0 -1.4839375 -1.8306877 -1.13718726 0.0000000
+## 4-0 -1.5296250 -1.8763752 -1.18287476 0.0000000
+## 2-1 -0.2686458 -0.6153961  0.07810441 0.2109076
+## 3-1 -0.6333125 -0.9800627 -0.28656226 0.0000101
+## 4-1 -0.6790000 -1.0257502 -0.33224976 0.0000018
+## 3-2 -0.3646667 -0.7114169 -0.01791643 0.0338202
+## 4-2 -0.4103542 -0.7571044 -0.06360393 0.0113476
+## 4-3 -0.0456875 -0.3924377  0.30106274 0.9963020
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{TukeyHSD}\NormalTok{(ulva\_photosyn\_model\_aov, }\StringTok{"Temperature"}\NormalTok{, }\AttributeTok{ordered =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = alpha.1 ~ Treatment + Temperature, data = ulva)
+## 
+## $Temperature
+##            diff         lwr       upr     p adj
+## 27-20  0.303925  0.07348064 0.5343694 0.0059250
+## 30-20  0.252950  0.02250564 0.4833944 0.0275126
+## 30-27 -0.050975 -0.28141936 0.1794694 0.8607823
+\end{verbatim}
+
+\hypertarget{alpha-plot-the-results}{%
+\section{alpha -- Plot the results}\label{alpha-plot-the-results}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{allEffects}\NormalTok{(run5\_6\_photosyn\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ulva_etrmax_ek_mixed_model_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+run5\_6\_photosyn\_model\_noint \textless- lmer(formula = ek.1
+\textasciitilde{} Treatment + Temperature + (1 \textbar{} Run) + (1
+\textbar{} Plant.ID) + (1 \textbar{} RLC.Order), data = ulva) Note that
+the \texttt{echo\ =\ FALSE} parameter was added to the code chunk to
+prevent printing of the R code that generated the plot.
+
+\end{document}

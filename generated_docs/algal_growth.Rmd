@@ -1,0 +1,164 @@
+---
+title: "Ulva and Hypnea Photosynthesis and GROWTH Run5 - Sept-Nov 2021"
+author: "Angela Richards Donà"
+date: "1/28/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## run5.6 GROWTH RATE Analysis, Script Chunks, and Plots
+
+This is the analysis of the final run of the Ulva and Hypnea salinity and nutrient experiments 
+conducted on the lanai in St. John 616. These experiments incorporated three temperature levels.
+Data gaps for both species filled by end of April 2022. This output reflects all
+data totally five treatments for each species.
+
+Packages loaded:
+
+```{r, message=FALSE}
+library(lme4)
+library(lmerTest)
+library(effects)
+library(car)
+library(MuMIn)
+library (dplyr)
+library(emmeans)
+library(DHARMa)
+library(performance)
+library(patchwork)
+```
+## Load and prepare the dataset
+Open growth/weight dataset
+
+```{r}
+run5.6_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data/run5-6_growth_all_042922.csv")
+```
+
+Make a new column for weight change (difference final from initial)
+
+```{r run5.6_growth}
+run5.6_growth$growth_rate_percent <- 
+  (run5.6_growth$final.weight - run5.6_growth$Initial.weight) / run5.6_growth$Initial.weight * 100
+```
+
+Also make a new column for daily growth rate from 8 day study (steady growth rate assumed rather than exponential), 
+which may or may not be used
+
+```{r}
+run5.6_growth$steady_growth_daily <- run5.6_growth$growth_rate_percent / 8
+```
+## Make a new column that keeps only the numerical values for temperature (removes C)
+
+```{r}
+run5.6_growth$temp_clean <- as.factor(substr(run5.6_growth$temperature, 1, 2))
+```
+## Change levels to factors
+
+```{r}
+run5.6_growth$temperature <- as.factor(run5.6_growth$temp_clean)
+run5.6_growth$run <- as.factor(run5.6_growth$run)
+run5.6_growth$treatment <- as.factor(as.character(run5.6_growth$treatment))
+
+```
+
+# Create subset of the data to isolate the species
+```{r}
+hypnea <- subset(run5.6_growth, Species == "Hm")
+ulva <- subset(run5.6_growth, Species == "Ul")
+```
+
+# Run the model
+
+# ULVA 
+# run model without interaction since interaction caused collinearity issues
+
+```{r ulva}
+run5.6_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + 
+                                    temperature + (1 | run) + (1 | plant.ID) + 
+                                    (1 | RLC.order), data = ulva)
+```
+
+#make a histogram of the data for Ulva
+
+```{r run5.6_growth_model_noint, fig.width=5}
+hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"),
+     col = "olivedrab3", labels = TRUE)
+```
+```{r}
+plot(resid(run5.6_growth_model_noint) ~ fitted(run5.6_growth_model_noint))
+qqnorm(resid(run5.6_growth_model_noint))
+qqline(resid(run5.6_growth_model_noint))
+```
+
+## Check the performance of the model for Ulva
+```{r fig.height=8}
+performance::check_model(run5.6_growth_model_noint)
+```
+These outputs show the model is acceptable
+
+##Run ANOVA and Tukey's comparison
+
+ANOVA shows that there is no significant difference between temperatures but
+the salinity/nutrient treatments are very close to significant. Tukey's is run
+on treatments to see pairwise comparisons
+```{r}
+anova(run5.6_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
+ulva_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = ulva)
+TukeyHSD(ulva_growth_model_aov, "treatment", ordered = FALSE)
+```
+
+```{r}
+r.squaredGLMM(run5.6_growth_model_noint)
+summary(run5.6_growth_model_noint)
+```
+
+# Effects Plots
+```{r}
+plot(allEffects(run5.6_growth_model_noint))
+```
+
+
+
+# HYPNEA 
+```{r hypnea}
+run5.6_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + 
+                                    temperature + (1 | run) + (1 | plant.ID) + 
+                                    (1 | RLC.order), data = hypnea)
+```
+
+## Check the performance of the model for Hypnea
+```{r, fig.height=8}
+performance::check_model(run5.6_growth_model_noint)
+```
+These outputs show the model is acceptable for the data
+
+```{r, fig.width=5}
+hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), 
+     col = "maroon", labels = TRUE)
+```
+```{r}
+plot(resid(run5.6_growth_model_noint) ~ fitted(run5.6_growth_model_noint))
+qqnorm(resid(run5.6_growth_model_noint))
+qqline(resid(run5.6_growth_model_noint))
+```
+
+```{r}
+anova(run5.6_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
+hypnea_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = hypnea)
+TukeyHSD(hypnea_growth_model_aov, "treatment", ordered = FALSE)
+```
+
+```{r}
+r.squaredGLMM(run5.6_growth_model_noint)
+summary(run5.6_growth_model_noint)
+
+```
+# Effects Plots
+```{r}
+plot(allEffects(run5.6_growth_model_noint))
+
+
+```
