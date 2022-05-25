@@ -34,7 +34,7 @@ library(patchwork)
 Open growth/weight dataset
 
 ```{r}
-run5.6_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data/run5-6_growth_all_042922.csv")
+run5.6_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/run5-6_growth_all_042922.csv")
 ```
 
 Make a new column for weight change (difference final from initial)

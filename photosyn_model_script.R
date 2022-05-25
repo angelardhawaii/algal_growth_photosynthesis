@@ -24,6 +24,9 @@ run5_6_photosyn_data$Temperature <- as.factor(run5_6_photosyn_data$Temp...C.)
 #assigns treatment as characters from integers then to factors
 run5_6_photosyn_data$Treatment <- as.factor(as.character(run5_6_photosyn_data$Treatment))
 
+# assign deltaNPQ as a factor
+run5_6_photosyn_data$deltaNPQ <- as.factor(run5_6_photosyn_data$deltaNPQ)
+
 #toggle between the species for output. Use Day 9 for final analysis
 hypnea <- subset(run5_6_photosyn_data, Species == "hm" & RLC.Day == 9)
 ulva <- subset(run5_6_photosyn_data, Species == "ul" & RLC.Day == 9)
@@ -46,6 +49,7 @@ hypnea$growth_rate <- round((gr_hypnea$final.weight - gr_hypnea$Initial.weight) 
 #ULVA 
 #run model without interaction
 run5_6_photosyn_model_noint <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva)
+
 
 #make a histogram and residual plots of the data for ulva
 hist(ulva$rETRmax, main = paste("Ulva lactuca"), col = "olivedrab3", labels = TRUE)

@@ -12,7 +12,7 @@ library(patchwork)
 library(ggplot2)
 
 #open weight dataset and make columns for growth rate from initial and final weights
-run5.6_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data/run5-6_growth_all_042922.csv")
+run5.6_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/run5-6_growth_all_042922.csv")
 
 #make a new column for weight change (difference final from initial)
 run5.6_growth$growth_rate_percent <- (run5.6_growth$final.weight - run5.6_growth$Initial.weight) / run5.6_growth$Initial.weight * 100
