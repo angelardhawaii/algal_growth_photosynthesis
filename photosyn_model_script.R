@@ -28,7 +28,8 @@ run5_6_photosyn_data$Treatment <- as.factor(as.character(run5_6_photosyn_data$Tr
 run5_6_photosyn_data$deltaNPQ <- as.factor(run5_6_photosyn_data$deltaNPQ)
 
 #toggle between the species for output. Use Day 9 for final analysis
-hypnea <- subset(run5_6_photosyn_data, Species == "hm" & RLC.Day == 9)
+#recent change: removing the very odd ek.1 value of 559.4 in hypnea dataset
+hypnea <- subset(run5_6_photosyn_data, Species == "hm" & RLC.Day == 9 & ek.1 < 226)
 ulva <- subset(run5_6_photosyn_data, Species == "ul" & RLC.Day == 9)
 
 #add growth rate from other dataset to this one and subset by species
