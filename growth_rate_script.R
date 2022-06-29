@@ -69,6 +69,9 @@ performance::check_model(run5.6_growth_model_noint)
 
 r.squaredGLMM(run5.6_growth_model_noint)
 summary(run5.6_growth_model_noint)
+ranef(run5.6_growth_model_noint)
+
+
 
 plot(allEffects(run5.6_growth_model_noint))
 anova(run5.6_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
