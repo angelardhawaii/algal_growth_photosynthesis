@@ -58,7 +58,8 @@ all_growth$lunar.phase <- as.factor(all_growth$lunar.phase)
 hypnea <- subset(all_growth, Species == "Hm")
 ulva <- subset(all_growth, Species == "Ul")
 
-ulva <- subset(all_growth, Species == "Ul" & treatment != 0)
+#create subsets for the plots
+ulva <- subset(all_growth, Species == "Ul")
 ulva$treatment_graph[ulva$treatment == 0] <- "1) 35ppt/0.5umol"
 ulva$treatment_graph[ulva$treatment == 1] <- "2) 35ppt/14umol" 
 ulva$treatment_graph[ulva$treatment == 2] <- "3) 28ppt/27umol" 
@@ -71,12 +72,12 @@ hypnea$treatment_graph[hypnea$treatment == 1] <- "2) 35ppt/14umol"
 hypnea$treatment_graph[hypnea$treatment == 2] <- "3) 28ppt/27umol" 
 hypnea$treatment_graph[hypnea$treatment == 3] <- "5) 18ppt/53umol" 
 hypnea$treatment_graph[hypnea$treatment == 4] <- "6) 11ppt/80umol"
-hypnea$treatment_graph[hypnea$treatment == 5] <- "4) 28ppt/53umol"
+hypnea$treatment_graph[hypnea$treatment == 3.5] <- "4) 28ppt/53umol"
 
 
 #ULVA 
 #run model without interaction (0 in model permits display of four levels of treatments - no intercept)
-all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | run) + (1 | plant.ID), data = ulva)
+all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) + (1 | run), data = ulva)
 
 #make a histogram of the data for ulva
 hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"), col = "olivedrab3", labels = TRUE)
@@ -98,10 +99,14 @@ ranef(all_growth_model_noint)
 
 #check for equal variance
 bartlett.test(growth_rate_percent ~ treatment, data = ulva)
-#bartlett.test(growth_rate_percent ~ temperature, data = ulva)
+bartlett.test(growth_rate_percent ~ temperature, data = ulva)
 #run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
 welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = ulva, var.equal = FALSE)
 welch_anova_treatment
+welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = ulva, var.equal = FALSE)
+welch_anova_temp
+
+
 games_howell_test(ulva, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = TRUE)
 
 #temperature has no effect
@@ -111,22 +116,25 @@ plot(allEffects(all_growth_model_noint))
 
 ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = TRUE) + 
-  labs(x="salinty/nitrate", y= "8-Day Growth Rate (%)", title= "Growth Rate (%)", subtitle = "Ulva lactuca") + 
-  scale_x_discrete(labels = c("35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = FALSE) + 
+  labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "A", subtitle = "Ulva lactuca") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-100, 200) + stat_mean() + 
   geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
-  theme_bw()
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
 
 #HYPNEA 
 #run model without interaction  (0 in model permits display of four levels of treatments - no intercept)
-all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | run) + (1 | plant.ID), data = hypnea)
+all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | run) + (1 | plant.ID) + (1 | RLC.order), data = hypnea)
+
 #OR make a histogram of the data for hypnea
 hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), col = "maroon", labels = TRUE)
 
 hypnea %>% ggplot(aes(growth_rate_percent)) +
   geom_histogram(binwidth=5, fill = "#990066", color = "black", size = 0.25, alpha = 0.85) +
   theme_bw()
+
 plot(resid(all_growth_model_noint) ~ fitted(all_growth_model_noint))
 qqnorm(resid(all_growth_model_noint))
 qqline(resid(all_growth_model_noint))
@@ -140,10 +148,12 @@ ranef(all_growth_model_noint)
 
 #check for equal variance
 bartlett.test(growth_rate_percent ~ treatment, data = hypnea)
-#bartlett.test(growth_rate_percent ~ temperature, data = hypnea)
+bartlett.test(growth_rate_percent ~ temperature, data = hypnea)
 #run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
 welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = hypnea, var.equal = FALSE)
 welch_anova_treatment
+welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = hypnea, var.equal = FALSE)
+welch_anova_temp
 games_howell_test(hypnea, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = TRUE)
 
 #temperature has no effect
@@ -154,17 +164,22 @@ plot(allEffects(all_growth_model_noint))
 hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
   geom_boxplot(size=0.5) + 
   geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = TRUE) + 
-  labs(x="salinty/nitrate", y= "8-Day Growth Rate (%)", title= "Growth Rate (%)", subtitle = "Hypnea musciformis") + 
+  labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "B", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-100, 200) + stat_mean() + 
   geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
-  theme_bw()
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
 
-plot(allEffects(all_growth_model_noint))
-anova(all_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
-plot(resid(all_growth_model_noint) ~ fitted(all_growth_model_noint))
-qqnorm(resid(all_growth_model_noint))
-qqline(resid(all_growth_model_noint))
+
+
+
+
+
+# dont use
+#anova(all_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
+
+
 #--------------no longer in use------------------
 #ulva_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = ulva)
 #TukeyHSD(ulva_growth_model_aov, "treatment", ordered = FALSE)

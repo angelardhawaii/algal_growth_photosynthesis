@@ -1,0 +1,1249 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Ulva and Hypnea GROWTH Rate Percentage},
+  pdfauthor={Angela Richards Donà},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Ulva and Hypnea GROWTH Rate Percentage}
+\author{Angela Richards Donà}
+\date{10/11/2022}
+
+\begin{document}
+\maketitle
+
+\hypertarget{growth-rate-analysis-script-chunks-and-plots}{%
+\subsection{GROWTH RATE Analysis, Script Chunks, and
+Plots}\label{growth-rate-analysis-script-chunks-and-plots}}
+
+This is the analysis of the numerous runs of the Ulva and Hypnea
+salinity and nutrient experiments conducted on the lanai in St.~John
+616. These experiments incorporated three temperature levels. Data gaps
+for both species filled in April 2022 and subsequently in October 2022.
+This output reflects all data totaling five treatments for each species.
+At end of October 2022 all data will be incorporated.
+
+Packages loaded:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lme4)}
+\FunctionTok{library}\NormalTok{(lmerTest)}
+\FunctionTok{library}\NormalTok{(effects)}
+\FunctionTok{library}\NormalTok{(car)}
+\FunctionTok{library}\NormalTok{(MuMIn)}
+\FunctionTok{library}\NormalTok{ (dplyr)}
+\FunctionTok{library}\NormalTok{(emmeans)}
+\FunctionTok{library}\NormalTok{(DHARMa)}
+\FunctionTok{library}\NormalTok{(performance)}
+\FunctionTok{library}\NormalTok{(patchwork)}
+\FunctionTok{library}\NormalTok{(rstatix)}
+\end{Highlighting}
+\end{Shaded}
+
+\#for plots and tables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(ggpubr)}
+\FunctionTok{library}\NormalTok{(forcats)}
+\FunctionTok{library}\NormalTok{(RColorBrewer)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages --------------------------------------- tidyverse 1.3.2 --
+## v tibble  3.1.8     v purrr   0.3.4
+## v tidyr   1.2.0     v stringr 1.4.0
+## v readr   2.1.2     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x tidyr::expand()   masks Matrix::expand()
+## x rstatix::filter() masks dplyr::filter(), stats::filter()
+## x dplyr::lag()      masks stats::lag()
+## x tidyr::pack()     masks Matrix::pack()
+## x dplyr::recode()   masks car::recode()
+## x purrr::some()     masks car::some()
+## x tidyr::unpack()   masks Matrix::unpack()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sjPlot)}
+\FunctionTok{library}\NormalTok{(sjmisc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'sjmisc'
+## 
+## The following object is masked from 'package:purrr':
+## 
+##     is_empty
+## 
+## The following object is masked from 'package:tidyr':
+## 
+##     replace_na
+## 
+## The following object is masked from 'package:tibble':
+## 
+##     add_case
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(gt)}
+\FunctionTok{library}\NormalTok{(purrr)}
+\FunctionTok{library}\NormalTok{(stringr)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\#open weight dataset and make columns for growth rate from initial and
+final weights
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"/Users/Angela/src/work/limu/algal\_growth\_photosynthesis/data\_input/all\_runs\_growth\_081722.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Make a new column for weight change (difference final from initial)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{growth\_rate\_percent }\OtherTok{\textless{}{-}}\NormalTok{ (all\_growth}\SpecialCharTok{$}\NormalTok{final.weight }\SpecialCharTok{{-}}\NormalTok{ all\_growth}\SpecialCharTok{$}\NormalTok{Initial.weight) }\SpecialCharTok{/}\NormalTok{ all\_growth}\SpecialCharTok{$}\NormalTok{Initial.weight }\SpecialCharTok{*} \DecValTok{100}
+\end{Highlighting}
+\end{Shaded}
+
+Also make a new column for daily growth rate from 8 day study (steady
+growth rate assumed rather than exponential), which may or may not be
+used
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{steady\_growth\_daily }\OtherTok{\textless{}{-}}\NormalTok{ all\_growth}\SpecialCharTok{$}\NormalTok{growth\_rate\_percent }\SpecialCharTok{/} \DecValTok{8}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{make-a-new-column-that-keeps-only-the-numerical-values-for-temperature-removes-c}{%
+\subsection{Make a new column that keeps only the numerical values for
+temperature (removes
+C)}\label{make-a-new-column-that-keeps-only-the-numerical-values-for-temperature-removes-c}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{temp\_clean }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(}\FunctionTok{substr}\NormalTok{(all\_growth}\SpecialCharTok{$}\NormalTok{temperature, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{change-levels-to-factors}{%
+\subsection{Change levels to factors}\label{change-levels-to-factors}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{temperature }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(all\_growth}\SpecialCharTok{$}\NormalTok{temp\_clean)}
+
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{treatment }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(all\_growth}\SpecialCharTok{$}\NormalTok{treatment))}
+
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{run }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(all\_growth}\SpecialCharTok{$}\NormalTok{run)}
+
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{plant.ID }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(all\_growth}\SpecialCharTok{$}\NormalTok{plant.ID)}
+
+\NormalTok{all\_growth}\SpecialCharTok{$}\NormalTok{RLC.order }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(all\_growth}\SpecialCharTok{$}\NormalTok{RLC.order)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{create-subset-of-the-data-to-isolate-the-species}{%
+\section{Create subset of the data to isolate the
+species}\label{create-subset-of-the-data-to-isolate-the-species}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hypnea }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(all\_growth, Species }\SpecialCharTok{==} \StringTok{"Hm"}\NormalTok{)}
+\NormalTok{ulva }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(all\_growth, Species }\SpecialCharTok{==} \StringTok{"Ul"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\#create subsets for the plots
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(all\_growth, Species }\SpecialCharTok{==} \StringTok{"Ul"}\NormalTok{)}
+\NormalTok{ulva}\SpecialCharTok{$}\NormalTok{treatment\_graph[ulva}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{0}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"1) 35ppt/0.5umol"}
+\NormalTok{ulva}\SpecialCharTok{$}\NormalTok{treatment\_graph[ulva}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"2) 35ppt/14umol"} 
+\NormalTok{ulva}\SpecialCharTok{$}\NormalTok{treatment\_graph[ulva}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"3) 28ppt/27umol"} 
+\NormalTok{ulva}\SpecialCharTok{$}\NormalTok{treatment\_graph[ulva}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"4) 18ppt/53umol"} 
+\NormalTok{ulva}\SpecialCharTok{$}\NormalTok{treatment\_graph[ulva}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"5) 11ppt/80umol"}
+
+\NormalTok{hypnea }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(all\_growth, Species }\SpecialCharTok{==} \StringTok{"Hm"} \SpecialCharTok{\&}\NormalTok{ treatment }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{)}
+\NormalTok{hypnea}\SpecialCharTok{$}\NormalTok{treatment\_graph[hypnea}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{0}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"1) 35ppt/0.5umol"}
+\NormalTok{hypnea}\SpecialCharTok{$}\NormalTok{treatment\_graph[hypnea}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"2) 35ppt/14umol"} 
+\NormalTok{hypnea}\SpecialCharTok{$}\NormalTok{treatment\_graph[hypnea}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"3) 28ppt/27umol"} 
+\NormalTok{hypnea}\SpecialCharTok{$}\NormalTok{treatment\_graph[hypnea}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"5) 18ppt/53umol"} 
+\NormalTok{hypnea}\SpecialCharTok{$}\NormalTok{treatment\_graph[hypnea}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"6) 11ppt/80umol"}
+\NormalTok{hypnea}\SpecialCharTok{$}\NormalTok{treatment\_graph[hypnea}\SpecialCharTok{$}\NormalTok{treatment }\SpecialCharTok{==} \FloatTok{3.5}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"4) 28ppt/53umol"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{run-the-model}{%
+\section{Run the model}\label{run-the-model}}
+
+\hypertarget{ulva}{%
+\section{ULVA}\label{ulva}}
+
+\hypertarget{run-model-without-interaction-since-interaction-caused-collinearity-issues}{%
+\section{run model without interaction since interaction caused
+collinearity
+issues}\label{run-model-without-interaction-since-interaction-caused-collinearity-issues}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth\_model\_noint }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{+}\NormalTok{ temperature }\SpecialCharTok{+} 
+\NormalTok{                                 (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ plant.ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ run), }\AttributeTok{data =}\NormalTok{ ulva)}
+\end{Highlighting}
+\end{Shaded}
+
+Make a histogram of the data for Ulva
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(ulva}\SpecialCharTok{$}\NormalTok{growth\_rate\_percent, }\AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Ulva lactuca Growth Rate (\%)"}\NormalTok{), }\AttributeTok{col =} \StringTok{"olivedrab3"}\NormalTok{, }\AttributeTok{labels =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(growth\_rate\_percent)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth=}\DecValTok{5}\NormalTok{, }\AttributeTok{fill =} \StringTok{"\#5BB300"}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.25}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.85}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+Plot residuals etc
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(all\_growth\_model\_noint) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{fitted}\NormalTok{(all\_growth\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{resid}\NormalTok{(all\_growth\_model\_noint))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{resid}\NormalTok{(all\_growth\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-11-2.pdf}
+
+Check the performance of the model for Ulva
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_model}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Get r-squared, summary of model, and view random effects levels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{r.squaredGLMM}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: 'r.squaredGLMM' now calculates a revised statistic. See the help page.
+\end{verbatim}
+
+\begin{verbatim}
+##            R2m       R2c
+## [1,] 0.2104576 0.7429601
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: growth_rate_percent ~ treatment + temperature + (1 | plant.ID) +  
+##     (1 | run)
+##    Data: ulva
+## 
+## REML criterion at convergence: 2146.5
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.6188 -0.3140  0.0118  0.3964  3.4453 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  plant.ID (Intercept) 340.4    18.45   
+##  run      (Intercept) 315.0    17.75   
+##  Residual             316.4    17.79   
+## Number of obs: 240, groups:  plant.ID, 96; run, 5
+## 
+## Fixed effects:
+##               Estimate Std. Error      df t value Pr(>|t|)
+## (Intercept)      5.429     18.421   2.821   0.295    0.789
+## treatment1      26.123     20.521   2.780   1.273    0.299
+## treatment2      33.643     20.521   2.780   1.639    0.207
+## treatment3      40.934     20.521   2.780   1.995    0.147
+## treatment4      45.547     20.521   2.780   2.220    0.120
+## temperature27   -1.019      5.657 106.302  -0.180    0.857
+## temperature30   -1.894      5.657 106.302  -0.335    0.738
+## 
+## Correlation of Fixed Effects:
+##             (Intr) trtmn1 trtmn2 trtmn3 trtmn4 tmpr27
+## treatment1  -0.869                                   
+## treatment2  -0.869  0.984                            
+## treatment3  -0.869  0.984  0.984                     
+## treatment4  -0.869  0.984  0.984  0.984              
+## temperatr27 -0.154  0.000  0.000  0.000  0.000       
+## temperatr30 -0.154  0.000  0.000  0.000  0.000  0.500
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ranef}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $plant.ID
+##    (Intercept)
+## 1  -71.6937579
+## 2  -17.0011950
+## 3  -17.6773371
+## 4   13.6195407
+## 5   12.1339613
+## 6   -4.2335459
+## 7   53.8903492
+## 8   25.4293880
+## 9    3.4389325
+## 10  10.7905076
+## 11   8.2513203
+## 12   4.1155227
+## 13  26.4314353
+## 14  12.9335032
+## 15  21.0095419
+## 16  -6.9377199
+## 17 -31.5047985
+## 18  -6.7902965
+## 19 -30.9628127
+## 20  -0.6920750
+## 21  -3.2513343
+## 22   5.0511254
+## 23  14.2519472
+## 24   8.3111355
+## 25 -22.0972771
+## 26  11.8849210
+## 27   0.7393223
+## 28   5.7313968
+## 29   1.8171679
+## 30  16.6009104
+## 31   5.3029695
+## 32   0.1261937
+## 33  -1.4405490
+## 34 -12.6016860
+## 35  -9.0815154
+## 36  -5.5200045
+## 37 -56.9434501
+## 38  24.7414656
+## 39   9.6971266
+## 40   2.4577058
+## 41  -3.8807658
+## 42   2.4486738
+## 43   1.1072077
+## 44  22.5533036
+## 45  -6.7194356
+## 46  -6.6266217
+## 47   1.0129040
+## 48 -10.2233018
+## 49  -3.6436370
+## 50  -2.1233426
+## 51   5.8844278
+## 52   5.8450198
+## 53  -7.8006926
+## 54  -3.7643490
+## 55  -2.4942249
+## 56  -1.3000697
+## 57   0.7591055
+## 58   5.1313978
+## 59  -4.6134220
+## 60  -7.2616503
+## 61   0.7893277
+## 62  -5.7231308
+## 63   6.4287144
+## 64  -3.5110890
+## 65   6.3885874
+## 66  -0.7985380
+## 67  -1.0412660
+## 68  -0.4181764
+## 69   4.9003607
+## 70  -0.9204552
+## 71   0.1923047
+## 72   4.3113287
+## 73  -0.6422819
+## 74   2.9706703
+## 75  -0.8706494
+## 76   0.1300619
+## 77   7.1618369
+## 78   2.1981174
+## 79  -4.3290520
+## 80  -1.1673390
+## 81   1.7497424
+## 82   1.9287328
+## 83  -4.8610823
+## 84   0.8945463
+## 85  -0.5899610
+## 86  -3.2824006
+## 87  -1.4153134
+## 88  -3.7040336
+## 89   3.5291143
+## 90   0.9313177
+## 91   1.3789914
+## 92   0.3415420
+## 93   0.7042169
+## 94   2.8227455
+## 95  -0.6236139
+## 96  -0.4724398
+## 
+## $run
+##     (Intercept)
+## 1  1.949145e+01
+## 2  7.263738e+00
+## 3 -7.900846e+00
+## 4 -1.885434e+01
+## 6 -4.679037e-12
+## 
+## with conditional variances for "plant.ID" "run"
+\end{verbatim}
+
+These outputs should show whether the model is acceptable
+
+Check for equal variance
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ ulva)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  growth_rate_percent by treatment
+## Bartlett's K-squared = 105.38, df = 4, p-value < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ temperature, }\AttributeTok{data =}\NormalTok{ ulva)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  growth_rate_percent by temperature
+## Bartlett's K-squared = 11.021, df = 2, p-value = 0.004044
+\end{verbatim}
+
+Run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{welch\_anova\_treatment }\OtherTok{\textless{}{-}} \FunctionTok{oneway.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ ulva, }\AttributeTok{var.equal =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{welch\_anova\_treatment}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  growth_rate_percent and treatment
+## F = 54.538, num df = 4.00, denom df = 100.78, p-value < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{welch\_anova\_temp }\OtherTok{\textless{}{-}} \FunctionTok{oneway.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ temperature, }\AttributeTok{data =}\NormalTok{ ulva, }\AttributeTok{var.equal =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{welch\_anova\_temp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  growth_rate_percent and temperature
+## F = 0.16306, num df = 2.00, denom df = 155.23, p-value = 0.8497
+\end{verbatim}
+
+Pairwise comparisons for significant results
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{games\_howell\_test}\NormalTok{(ulva, growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{conf.level =} \FloatTok{0.95}\NormalTok{, }\AttributeTok{detailed =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 10 x 14
+##    .y.     group1 group2    n1    n2 estim~1 conf.~2 conf.~3    se stati~4    df
+##  * <chr>   <chr>  <chr>  <int> <int>   <dbl>   <dbl>   <dbl> <dbl>   <dbl> <dbl>
+##  1 growth~ 0      1         48    48   26.1    12.2     40.0  3.47   5.32   51.0
+##  2 growth~ 0      2         48    48   33.6    18.7     48.6  3.74   6.37   50.4
+##  3 growth~ 0      3         48    48   40.9    24.9     57.0  4.00   7.23   50.0
+##  4 growth~ 0      4         48    48   45.5    34.1     57.0  2.87  11.2    52.9
+##  5 growth~ 1      2         48    48    7.52  -12.2     27.2  5.00   1.06   93.5
+##  6 growth~ 1      3         48    48   14.8    -5.66    35.3  5.20   2.01   92.0
+##  7 growth~ 1      4         48    48   19.4     2.13    36.7  4.39   3.13   90.5
+##  8 growth~ 2      3         48    48    7.29  -13.9     28.5  5.38   0.958  93.5
+##  9 growth~ 2      4         48    48   11.9    -6.24    30.0  4.61   1.83   87.6
+## 10 growth~ 3      4         48    48    4.61  -14.4     23.6  4.82   0.676  84.6
+## # ... with 3 more variables: p.adj <dbl>, p.adj.signif <chr>, method <chr>, and
+## #   abbreviated variable names 1: estimate, 2: conf.low, 3: conf.high,
+## #   4: statistic
+## # i Use `colnames()` to see all variable names
+\end{verbatim}
+
+Effects Plots and model table
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tab\_model}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+~
+
+growth\_rate\_percent
+
+Predictors
+
+Estimates
+
+CI
+
+p
+
+(Intercept)
+
+5.43
+
+-30.87~--~41.72
+
+0.768
+
+treatment {[}1{]}
+
+26.12
+
+-14.31~--~66.56
+
+0.204
+
+treatment {[}2{]}
+
+33.64
+
+-6.79~--~74.08
+
+0.102
+
+treatment {[}3{]}
+
+40.93
+
+0.50~--~81.37
+
+0.047
+
+treatment {[}4{]}
+
+45.55
+
+5.11~--~85.98
+
+0.027
+
+temperature {[}27{]}
+
+-1.02
+
+-12.16~--~10.13
+
+0.857
+
+temperature {[}30{]}
+
+-1.89
+
+-13.04~--~9.25
+
+0.738
+
+Random Effects
+
+σ2
+
+316.36
+
+τ00 plant.ID
+
+340.40
+
+τ00 run
+
+314.99
+
+ICC
+
+0.67
+
+N plant.ID
+
+96
+
+N run
+
+5
+
+Observations
+
+240
+
+Marginal R2 / Conditional R2
+
+0.210 / 0.743
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{allEffects}\NormalTok{(all\_growth\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+Use ggplot2 to plot the results
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ulva }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(treatment\_graph, growth\_rate\_percent)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{size=}\FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ temperature), }\AttributeTok{show.legend =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x=}\StringTok{"salinity/nitrate"}\NormalTok{, }\AttributeTok{y=} \StringTok{"8{-}Day Growth Rate (\%)"}\NormalTok{, }\AttributeTok{title=} \StringTok{"A"}\NormalTok{, }\AttributeTok{subtitle =} \StringTok{"Ulva lactuca"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"35ppt/0.5umolN"}\NormalTok{, }\StringTok{"35ppt/14umolN"}\NormalTok{, }\StringTok{"28ppt/27umolN"}\NormalTok{, }\StringTok{"18ppt/53umolN"}\NormalTok{, }\StringTok{"11ppt/80umolN"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{ylim}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\DecValTok{200}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{stat\_mean}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept=}\DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"purple"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{15}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.05}\NormalTok{), }
+        \AttributeTok{plot.subtitle =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"italic"}\NormalTok{, }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{20}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.05}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\hypertarget{hypnea}{%
+\section{HYPNEA}\label{hypnea}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_growth\_model\_noint }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment }\SpecialCharTok{+}\NormalTok{ temperature }\SpecialCharTok{+} 
+\NormalTok{                                 (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ run) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ plant.ID) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ RLC.order), }\AttributeTok{data =}\NormalTok{ hypnea)}
+\end{Highlighting}
+\end{Shaded}
+
+These outputs show the model is acceptable for the data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(hypnea}\SpecialCharTok{$}\NormalTok{growth\_rate\_percent, }\AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Hypnea musciformis Growth Rate (\%)"}\NormalTok{), }\AttributeTok{col =} \StringTok{"maroon"}\NormalTok{, }\AttributeTok{labels =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-19-1.pdf}
+Or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hypnea }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(growth\_rate\_percent)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth=}\DecValTok{5}\NormalTok{, }\AttributeTok{fill =} \StringTok{"\#990066"}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.25}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.85}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(all\_growth\_model\_noint) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{fitted}\NormalTok{(all\_growth\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{resid}\NormalTok{(all\_growth\_model\_noint))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{resid}\NormalTok{(all\_growth\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-21-2.pdf}
+
+Check the performance of the model for Hypnea
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_model}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+Get r squared, summary of model, and random effects levels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{r.squaredGLMM}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            R2m       R2c
+## [1,] 0.1644597 0.4022791
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: growth_rate_percent ~ treatment + temperature + (1 | run) + (1 |  
+##     plant.ID) + (1 | RLC.order)
+##    Data: hypnea
+## 
+## REML criterion at convergence: 2081.8
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -5.6796 -0.3253  0.1225  0.4421  3.1569 
+## 
+## Random effects:
+##  Groups    Name        Variance Std.Dev.
+##  plant.ID  (Intercept) 111.159  10.543  
+##  RLC.order (Intercept)   8.876   2.979  
+##  run       (Intercept)   3.190   1.786  
+##  Residual              309.705  17.598  
+## Number of obs: 240, groups:  plant.ID, 96; RLC.order, 6; run, 5
+## 
+## Fixed effects:
+##               Estimate Std. Error       df t value Pr(>|t|)    
+## (Intercept)    35.7815     4.1631  17.1258   8.595 1.28e-07 ***
+## treatment2    -15.4101     3.5923 161.5491  -4.290 3.07e-05 ***
+## treatment3    -11.5769     3.5923 161.5491  -3.223  0.00154 ** 
+## treatment3.5   -0.7223     4.6393   2.4459  -0.156  0.88820    
+## treatment4    -24.2979     3.5923 161.5491  -6.764 2.34e-10 ***
+## temperature27   0.1798     4.4743  19.3094   0.040  0.96836    
+## temperature30  -1.5010     4.2516  53.3627  -0.353  0.72546    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) trtmn2 trtmn3 trt3.5 trtmn4 tmpr27
+## treatment2  -0.431                                   
+## treatment3  -0.431  0.500                            
+## treatmnt3.5 -0.495  0.387  0.387                     
+## treatment4  -0.431  0.500  0.500  0.387              
+## temperatr27 -0.524  0.000  0.000  0.000  0.000       
+## temperatr30 -0.514  0.000  0.000  0.000  0.000  0.486
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ranef}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $plant.ID
+##    (Intercept)
+## 1    5.7805623
+## 2    3.6567603
+## 3    7.5853342
+## 4    3.7493084
+## 5    2.1662050
+## 6    7.3246851
+## 7   -0.4403667
+## 8  -17.5352090
+## 9    5.7547985
+## 10   7.3038415
+## 11   7.3697814
+## 12   2.9483829
+## 13  13.8187639
+## 14   9.4601013
+## 15  -0.0183465
+## 16  -3.4997253
+## 17  -6.3995808
+## 18  12.4526215
+## 19  10.8917537
+## 20   3.0180654
+## 21   1.9814861
+## 22   3.0036918
+## 23 -14.9085920
+## 24 -28.4582776
+## 25  -0.1617671
+## 26  -4.1908943
+## 27   4.8605882
+## 28   4.0282164
+## 29  12.2167054
+## 30 -10.4235952
+## 31  -2.8680295
+## 32 -11.1473160
+## 33  -3.2504458
+## 34  -1.9401560
+## 35  -9.5462852
+## 36   2.8538327
+## 37   1.5280456
+## 38   7.8106826
+## 39   0.2130384
+## 40  -6.2893341
+## 41  -2.6354349
+## 42  -2.8163780
+## 43  -0.3437110
+## 44   0.7204359
+## 45   1.3398584
+## 46   2.4800287
+## 47  -1.1749649
+## 48 -18.2691658
+## 49   5.1926340
+## 50   3.3601428
+## 51  -3.9171882
+## 52   0.5096255
+## 53  -2.2950447
+## 54  -0.7726815
+## 55  -5.0616438
+## 56   3.4052879
+## 57  -6.7736734
+## 58  -1.1267878
+## 59  -1.7454584
+## 60   1.4952913
+## 61   3.6005497
+## 62  -0.1006687
+## 63   2.6849660
+## 64  -1.2809711
+## 65   0.7968472
+## 66   3.0603717
+## 67 -11.2831315
+## 68  -5.8520472
+## 69  -0.4001151
+## 70   1.0199400
+## 71  -0.3605774
+## 72   0.9781582
+## 73 -11.4709499
+## 74  -2.0625230
+## 75  -2.0613943
+## 76   0.3745557
+## 77   2.1611781
+## 78   1.7133780
+## 79  -2.0649365
+## 80  -1.8509369
+## 81  -3.7688168
+## 82   1.6625240
+## 83  -3.8374766
+## 84  -1.6457940
+## 85   3.1532484
+## 86   2.0851360
+## 87   8.9038351
+## 88  12.2393469
+## 89   0.7510597
+## 90   2.5947883
+## 91  -7.5951409
+## 92   0.8192918
+## 93   1.5878582
+## 94   4.9011031
+## 95   6.0709267
+## 96   2.2059136
+## 
+## $RLC.order
+##   (Intercept)
+## 1  -0.7385705
+## 2   0.9246115
+## 3  -0.2749284
+## 4   2.8463190
+## 5  -1.0659570
+## 6  -1.6914746
+## 
+## $run
+##     (Intercept)
+## 1  1.023411e+00
+## 2  3.850871e-02
+## 3 -5.615530e-01
+## 4 -5.003663e-01
+## 6  2.508303e-14
+## 
+## with conditional variances for "plant.ID" "RLC.order" "run"
+\end{verbatim}
+
+Check for equal variance
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ hypnea)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  growth_rate_percent by treatment
+## Bartlett's K-squared = 10.56, df = 4, p-value = 0.03198
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ temperature, }\AttributeTok{data =}\NormalTok{ hypnea)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  growth_rate_percent by temperature
+## Bartlett's K-squared = 40.289, df = 2, p-value = 1.784e-09
+\end{verbatim}
+
+Run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{welch\_anova\_treatment }\OtherTok{\textless{}{-}} \FunctionTok{oneway.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{data =}\NormalTok{ hypnea, }\AttributeTok{var.equal =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{welch\_anova\_treatment}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  growth_rate_percent and treatment
+## F = 10.781, num df = 4.00, denom df = 116.95, p-value = 1.79e-07
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{welch\_anova\_temp }\OtherTok{\textless{}{-}} \FunctionTok{oneway.test}\NormalTok{(growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ temperature, }\AttributeTok{data =}\NormalTok{ hypnea, }\AttributeTok{var.equal =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{welch\_anova\_temp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  growth_rate_percent and temperature
+## F = 0.38233, num df = 2.00, denom df = 143.35, p-value = 0.683
+\end{verbatim}
+
+Pairwise comparison with Games Howell Test
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{games\_howell\_test}\NormalTok{(hypnea, growth\_rate\_percent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ treatment, }\AttributeTok{conf.level =} \FloatTok{0.95}\NormalTok{, }\AttributeTok{detailed =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 10 x 14
+##    .y.     group1 group2    n1    n2 estim~1 conf.~2 conf.~3    se stati~4    df
+##  * <chr>   <chr>  <chr>  <int> <int>   <dbl>   <dbl>   <dbl> <dbl>   <dbl> <dbl>
+##  1 growth~ 1      2         48    48 -15.4   -27.0    -3.83   2.94   3.70   92.1
+##  2 growth~ 1      3         48    48 -11.6   -22.4    -0.744  2.75   2.97   94.0
+##  3 growth~ 1      3.5       48    48  -0.722 -10.9     9.42   2.58   0.198  92.7
+##  4 growth~ 1      4         48    48 -24.3   -37.2   -11.4    3.27   5.25   86.0
+##  5 growth~ 2      3         48    48   3.83   -7.85   15.5    2.97   0.913  92.6
+##  6 growth~ 2      3.5       48    48  14.7     3.64   25.7    2.81   3.70   88.2
+##  7 growth~ 2      4         48    48  -8.89  -22.5     4.71   3.46   1.82   91.3
+##  8 growth~ 3      3.5       48    48  10.9     0.600  21.1    2.61   2.95   92.2
+##  9 growth~ 3      4         48    48 -12.7   -25.7     0.262  3.30   2.73   86.8
+## 10 growth~ 3.5    4         48    48 -23.6   -36.0   -11.1    3.15   5.29   80.5
+## # ... with 3 more variables: p.adj <dbl>, p.adj.signif <chr>, method <chr>, and
+## #   abbreviated variable names 1: estimate, 2: conf.low, 3: conf.high,
+## #   4: statistic
+## # i Use `colnames()` to see all variable names
+\end{verbatim}
+
+\hypertarget{effects-plot-and-table-of-model}{%
+\section{Effects Plot and table of
+model}\label{effects-plot-and-table-of-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tab\_model}\NormalTok{(all\_growth\_model\_noint)}
+\end{Highlighting}
+\end{Shaded}
+
+~
+
+growth\_rate\_percent
+
+Predictors
+
+Estimates
+
+CI
+
+p
+
+(Intercept)
+
+35.78
+
+27.58~--~43.98
+
+\textless0.001
+
+treatment {[}2{]}
+
+-15.41
+
+-22.49~--~-8.33
+
+\textless0.001
+
+treatment {[}3{]}
+
+-11.58
+
+-18.66~--~-4.50
+
+0.001
+
+treatment {[}3.5{]}
+
+-0.72
+
+-9.86~--~8.42
+
+0.876
+
+treatment {[}4{]}
+
+-24.30
+
+-31.38~--~-17.22
+
+\textless0.001
+
+temperature {[}27{]}
+
+0.18
+
+-8.64~--~9.00
+
+0.968
+
+temperature {[}30{]}
+
+-1.50
+
+-9.88~--~6.88
+
+0.724
+
+Random Effects
+
+σ2
+
+309.70
+
+τ00 plant.ID
+
+111.16
+
+τ00 RLC.order
+
+8.88
+
+τ00 run
+
+3.19
+
+ICC
+
+0.28
+
+N run
+
+5
+
+N plant.ID
+
+96
+
+N RLC.order
+
+6
+
+Observations
+
+240
+
+Marginal R2 / Conditional R2
+
+0.164 / 0.402
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{allEffects}\NormalTok{(all\_growth\_model\_noint))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+Make a plot with ggplot2
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hypnea }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(treatment\_graph, growth\_rate\_percent)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{size=}\FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ temperature), }\AttributeTok{show.legend =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x=}\StringTok{"salinity/nitrate"}\NormalTok{, }\AttributeTok{y=} \StringTok{"8{-}Day Growth Rate (\%)"}\NormalTok{, }\AttributeTok{title=} \StringTok{"B"}\NormalTok{, }\AttributeTok{subtitle =} \StringTok{"Hypnea musciformis"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"35ppt/14umolN"}\NormalTok{, }\StringTok{"28ppt/27umolN"}\NormalTok{, }\StringTok{"28ppt/53umolN"}\NormalTok{, }\StringTok{"18ppt/53umolN"}\NormalTok{, }\StringTok{"11ppt/80umolN"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{ylim}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\DecValTok{200}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{stat\_mean}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept=}\DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"purple"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \FunctionTok{c}\NormalTok{(}\FloatTok{0.90}\NormalTok{,}\FloatTok{0.90}\NormalTok{), }\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{15}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.05}\NormalTok{), }\AttributeTok{plot.subtitle =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"italic"}\NormalTok{, }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{20}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.05}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{algal_growth_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+\end{document}

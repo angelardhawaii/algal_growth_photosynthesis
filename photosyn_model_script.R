@@ -57,7 +57,7 @@ ulva$treatment_graph[ulva$Treatment == 2] <- "3) 28ppt/27umol"
 ulva$treatment_graph[ulva$Treatment == 3] <- "4) 18ppt/53umol" 
 ulva$treatment_graph[ulva$Treatment == 4] <- "5) 11ppt/80umol"
 #add growth rate from other dataset to this one and subset by species
-growth_rate <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/run5-6_growth_all_042922.csv")
+growth_rate <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_growth_081722.csv")
 growth_rate$Species <- as.factor(growth_rate$Species)
 growth_rate$treatment <- as.factor(growth_rate$treatment)
 growth_rate
@@ -92,6 +92,7 @@ performance::check_model(run5_6_photosyn_model_noint)
 r.squaredGLMM(run5_6_photosyn_model_noint)
 summary(run5_6_photosyn_model_noint)
 
+#check for equal variance
 bartlett.test(rETRmax ~ Treatment, data = ulva)
 #run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
 welch_anova_treatment <- oneway.test(rETRmax ~ Treatment, data = ulva, var.equal = FALSE)
@@ -131,7 +132,7 @@ plot(allEffects(run5_6_photosyn_model_ek))
 
 #plot a regression between the photosynthetic independent variables of interest and growth rate
 ulva_growth_etr_graph <- ggplot(ulva, aes(x=rETRmax, y=growth_rate)) + 
-  geom_point(alpha = 0.5, size = 3, aes(color = Treatment), show.legend = TRUE) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE) + 
   geom_smooth(method = "lm", col = "black") + theme_bw() + 
   labs(title = "Ulva lactuca rETRmax vs Growth Rate", x = "rETRmax (μmols electrons m-2 s-1)", 
        y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
@@ -200,7 +201,7 @@ plot(allEffects(run5_6_photosyn_model_ek))
 
 #plot a regression between the photosynthetic independent variables of interest and growth rate
 hypnea_growth_etr_graph <- ggplot(hypnea, aes(x=rETRmax, y=growth_rate)) + 
-  geom_point(alpha = 0.5, size = 3, aes(color = Treatment), show.legend = TRUE) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE) + 
   geom_smooth(method = "lm", col = "black") + theme_bw() + 
   labs(title = "Hypnea musciformis rETRmax vs Growth Rate", x = "rETRmax (μmols electrons m-2 s-1)", 
        y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor(label.y = 150)

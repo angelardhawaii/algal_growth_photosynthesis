@@ -1,20 +1,16 @@
 ---
-title: "Ulva and Hypnea Photosynthesis and GROWTH Run5 - Sept-Nov 2021"
+title: "Ulva and Hypnea GROWTH Rate Percentage"
 author: "Angela Richards Donà"
-date: "1/28/2022"
-output: pdf_document
+date: "10/11/2022"
+output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## GROWTH RATE Analysis, Script Chunks, and Plots
 
-## run5.6 GROWTH RATE Analysis, Script Chunks, and Plots
-
-This is the analysis of the final run of the Ulva and Hypnea salinity and nutrient experiments 
+This is the analysis of the numerous runs of the Ulva and Hypnea salinity and nutrient experiments 
 conducted on the lanai in St. John 616. These experiments incorporated three temperature levels.
-Data gaps for both species filled by end of April 2022. This output reflects all
-data totally five treatments for each species.
+Data gaps for both species filled in April 2022 and subsequently in October 2022. This output reflects all
+data totaling five treatments for each species. At end of October 2022 all data will be incorporated.
 
 Packages loaded:
 
@@ -29,136 +25,250 @@ library(emmeans)
 library(DHARMa)
 library(performance)
 library(patchwork)
+library(rstatix)
 ```
-## Load and prepare the dataset
-Open growth/weight dataset
+#for plots and tables
+
+```{r, message=FALSE}
+library(ggplot2)
+library(ggpubr)
+library(forcats)
+library(RColorBrewer)
+library(tidyverse)
+library(sjPlot)
+library(sjmisc)
+library(gt)
+library(purrr)
+library(stringr)
+library(tidyr)
+```
+#open weight dataset and make columns for growth rate from initial and final weights
+
 
 ```{r}
-run5.6_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/run5-6_growth_all_042922.csv")
+all_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_081722.csv")
 ```
 
 Make a new column for weight change (difference final from initial)
 
-```{r run5.6_growth}
-run5.6_growth$growth_rate_percent <- 
-  (run5.6_growth$final.weight - run5.6_growth$Initial.weight) / run5.6_growth$Initial.weight * 100
+```{r all_growth}
+all_growth$growth_rate_percent <- (all_growth$final.weight - all_growth$Initial.weight) / all_growth$Initial.weight * 100
 ```
 
 Also make a new column for daily growth rate from 8 day study (steady growth rate assumed rather than exponential), 
 which may or may not be used
 
 ```{r}
-run5.6_growth$steady_growth_daily <- run5.6_growth$growth_rate_percent / 8
+all_growth$steady_growth_daily <- all_growth$growth_rate_percent / 8
 ```
-## Make a new column that keeps only the numerical values for temperature (removes C)
+Make a new column that keeps only the numerical values for temperature (removes C)
 
 ```{r}
-run5.6_growth$temp_clean <- as.factor(substr(run5.6_growth$temperature, 1, 2))
+all_growth$temp_clean <- as.factor(substr(all_growth$temperature, 1, 2))
 ```
-## Change levels to factors
+Change levels to factors
 
 ```{r}
-run5.6_growth$temperature <- as.factor(run5.6_growth$temp_clean)
-run5.6_growth$run <- as.factor(run5.6_growth$run)
-run5.6_growth$treatment <- as.factor(as.character(run5.6_growth$treatment))
+all_growth$temperature <- as.factor(all_growth$temp_clean)
+
+all_growth$treatment <- as.factor(as.character(all_growth$treatment))
+
+all_growth$run <- as.factor(all_growth$run)
+
+all_growth$plant.ID <- as.factor(all_growth$plant.ID)
+
+all_growth$RLC.order <- as.factor(all_growth$RLC.order)
 
 ```
 
-# Create subset of the data to isolate the species
+Create subset of the data to isolate the species
+
 ```{r}
-hypnea <- subset(run5.6_growth, Species == "Hm")
-ulva <- subset(run5.6_growth, Species == "Ul")
+hypnea <- subset(all_growth, Species == "Hm")
+ulva <- subset(all_growth, Species == "Ul")
 ```
+
+Create subsets for the plots
+```{r}
+ulva <- subset(all_growth, Species == "Ul")
+ulva$treatment_graph[ulva$treatment == 0] <- "1) 35ppt/0.5umol"
+ulva$treatment_graph[ulva$treatment == 1] <- "2) 35ppt/14umol" 
+ulva$treatment_graph[ulva$treatment == 2] <- "3) 28ppt/27umol" 
+ulva$treatment_graph[ulva$treatment == 3] <- "4) 18ppt/53umol" 
+ulva$treatment_graph[ulva$treatment == 4] <- "5) 11ppt/80umol"
+
+hypnea <- subset(all_growth, Species == "Hm" & treatment != 0)
+hypnea$treatment_graph[hypnea$treatment == 0] <- "1) 35ppt/0.5umol"
+hypnea$treatment_graph[hypnea$treatment == 1] <- "2) 35ppt/14umol" 
+hypnea$treatment_graph[hypnea$treatment == 2] <- "3) 28ppt/27umol" 
+hypnea$treatment_graph[hypnea$treatment == 3] <- "5) 18ppt/53umol" 
+hypnea$treatment_graph[hypnea$treatment == 4] <- "6) 11ppt/80umol"
+hypnea$treatment_graph[hypnea$treatment == 3.5] <- "4) 28ppt/53umol"
+```
+
 
 # Run the model
 
 # ULVA 
-# run model without interaction since interaction caused collinearity issues
+run model without interaction since interaction caused collinearity issues
 
 ```{r ulva}
-run5.6_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + 
-                                    temperature + (1 | run) + (1 | plant.ID) + 
-                                    (1 | RLC.order), data = ulva)
+all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + 
+                                 (1 | plant.ID) + (1 | run), data = ulva)
 ```
 
-#make a histogram of the data for Ulva
+Make a histogram of the data for Ulva
 
-```{r run5.6_growth_model_noint, fig.width=5}
-hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"),
-     col = "olivedrab3", labels = TRUE)
-```
 ```{r}
-plot(resid(run5.6_growth_model_noint) ~ fitted(run5.6_growth_model_noint))
-qqnorm(resid(run5.6_growth_model_noint))
-qqline(resid(run5.6_growth_model_noint))
+hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"), col = "olivedrab3", labels = TRUE)
 ```
 
-## Check the performance of the model for Ulva
+or
+```{r}
+ulva %>% ggplot(aes(growth_rate_percent)) +
+  geom_histogram(binwidth=5, fill = "#5BB300", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
+```
+
+Plot residuals etc
+```{r}
+plot(resid(all_growth_model_noint) ~ fitted(all_growth_model_noint))
+qqnorm(resid(all_growth_model_noint))
+qqline(resid(all_growth_model_noint))
+```
+
+Check the performance of the model for Ulva
 ```{r fig.height=8}
-performance::check_model(run5.6_growth_model_noint)
+performance::check_model(all_growth_model_noint)
 ```
-These outputs show the model is acceptable
 
-##Run ANOVA and Tukey's comparison
+Get r-squared, summary of model
 
-ANOVA shows that there is no significant difference between temperatures but
-the salinity/nutrient treatments are very close to significant. Tukey's is run
-on treatments to see pairwise comparisons
+``` {r}
+r.squaredGLMM(all_growth_model_noint)
+summary(all_growth_model_noint)
+```
+These outputs should show whether the model is acceptable
+
+Get a summary of the means
 ```{r}
-anova(run5.6_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
-ulva_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = ulva)
-TukeyHSD(ulva_growth_model_aov, "treatment", ordered = FALSE)
+ulva %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
 ```
 
+Check for equal variance
+``` {r}
+bartlett.test(growth_rate_percent ~ treatment, data = ulva)
+bartlett.test(growth_rate_percent ~ temperature, data = ulva)
+```
+
+Run Welch's ANOVA if not equal variance
+``` {r}
+welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = ulva, var.equal = FALSE)
+welch_anova_treatment
+welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = ulva, var.equal = FALSE)
+welch_anova_temp
+```
+
+Pairwise comparisons for significant results
+``` {r}
+games_howell_test(ulva, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = FALSE)
+```
+
+Effects Plots and model table
 ```{r}
-r.squaredGLMM(run5.6_growth_model_noint)
-summary(run5.6_growth_model_noint)
+tab_model(all_growth_model_noint)
+plot(allEffects(all_growth_model_noint))
 ```
 
-# Effects Plots
-```{r}
-plot(allEffects(run5.6_growth_model_noint))
+Use ggplot2 to plot the results
+``` {r}
+ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = FALSE) + 
+  labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "A", subtitle = "Ulva lactuca") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-100, 200) + stat_mean() + 
+  geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
 ```
-
-
 
 # HYPNEA 
 ```{r hypnea}
-run5.6_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + 
-                                    temperature + (1 | run) + (1 | plant.ID) + 
-                                    (1 | RLC.order), data = hypnea)
+all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + 
+                                 (1 | run) + (1 | plant.ID) + (1 | RLC.order), data = hypnea)
 ```
 
-## Check the performance of the model for Hypnea
-```{r, fig.height=8}
-performance::check_model(run5.6_growth_model_noint)
-```
 These outputs show the model is acceptable for the data
 
 ```{r, fig.width=5}
-hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), 
-     col = "maroon", labels = TRUE)
+hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), col = "maroon", labels = TRUE)
 ```
-```{r}
-plot(resid(run5.6_growth_model_noint) ~ fitted(run5.6_growth_model_noint))
-qqnorm(resid(run5.6_growth_model_noint))
-qqline(resid(run5.6_growth_model_noint))
-```
-
-```{r}
-anova(run5.6_growth_model_noint, type = c("III"), ddf = "Satterthwaite")
-hypnea_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = hypnea)
-TukeyHSD(hypnea_growth_model_aov, "treatment", ordered = FALSE)
+Or
+``` {r}
+hypnea %>% ggplot(aes(growth_rate_percent)) +
+  geom_histogram(binwidth=5, fill = "#990066", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
 ```
 
 ```{r}
-r.squaredGLMM(run5.6_growth_model_noint)
-summary(run5.6_growth_model_noint)
-
+plot(resid(all_growth_model_noint) ~ fitted(all_growth_model_noint))
+qqnorm(resid(all_growth_model_noint))
+qqline(resid(all_growth_model_noint))
 ```
-# Effects Plots
+
+Check the performance of the model for Hypnea
+```{r, fig.height=8}
+performance::check_model(all_growth_model_noint)
+```
+
+Get r squared, summary of model
+``` {r}
+r.squaredGLMM(all_growth_model_noint)
+summary(all_growth_model_noint)
+```
+
+Get a summary of means
 ```{r}
-plot(allEffects(run5.6_growth_model_noint))
+hypnea %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(average = mean))
+```
+*Treatment 3.5 is the additional treatment 28 ppt/53 micromol N
 
+Check for equal variance
+```{r}
+bartlett.test(growth_rate_percent ~ treatment, data = hypnea)
+bartlett.test(growth_rate_percent ~ temperature, data = hypnea)
+```
 
+Run Welch's ANOVA if not equal variance
+``` {r}
+welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = hypnea, var.equal = FALSE)
+welch_anova_treatment
+welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = hypnea, var.equal = FALSE)
+welch_anova_temp
+```
+
+Pairwise comparison with Games Howell Test
+``` {r}
+games_howell_test(hypnea, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = FALSE)
+```
+
+# Effects Plot and table of model
+```{r}
+tab_model(all_growth_model_noint)
+plot(allEffects(all_growth_model_noint))
+```
+
+Make a plot with ggplot2
+``` {r}
+hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = TRUE) + 
+  labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "B", subtitle = "Hypnea musciformis") + 
+  scale_x_discrete(labels = c("35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-100, 200) + stat_mean() + 
+  geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
 ```
