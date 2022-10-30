@@ -46,7 +46,7 @@ library(tidyr)
 
 
 ```{r}
-all_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_081722.csv")
+all_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_102222.csv")
 ```
 
 Make a new column for weight change (difference final from initial)
@@ -94,16 +94,17 @@ ulva <- subset(all_growth, Species == "Ul")
 ulva$treatment_graph[ulva$treatment == 0] <- "1) 35ppt/0.5umol"
 ulva$treatment_graph[ulva$treatment == 1] <- "2) 35ppt/14umol" 
 ulva$treatment_graph[ulva$treatment == 2] <- "3) 28ppt/27umol" 
-ulva$treatment_graph[ulva$treatment == 3] <- "4) 18ppt/53umol" 
-ulva$treatment_graph[ulva$treatment == 4] <- "5) 11ppt/80umol"
+ulva$treatment_graph[ulva$treatment == 3] <- "5) 18ppt/53umol" 
+ulva$treatment_graph[ulva$treatment == 4] <- "6) 11ppt/80umol"
+ulva$treatment_graph[ulva$treatment == 2.5] <- "4) 28ppt/53umol"
 
-hypnea <- subset(all_growth, Species == "Hm" & treatment != 0)
+hypnea <- subset(all_growth, Species == "Hm")
 hypnea$treatment_graph[hypnea$treatment == 0] <- "1) 35ppt/0.5umol"
 hypnea$treatment_graph[hypnea$treatment == 1] <- "2) 35ppt/14umol" 
 hypnea$treatment_graph[hypnea$treatment == 2] <- "3) 28ppt/27umol" 
 hypnea$treatment_graph[hypnea$treatment == 3] <- "5) 18ppt/53umol" 
 hypnea$treatment_graph[hypnea$treatment == 4] <- "6) 11ppt/80umol"
-hypnea$treatment_graph[hypnea$treatment == 3.5] <- "4) 28ppt/53umol"
+hypnea$treatment_graph[hypnea$treatment == 2.5] <- "4) 28ppt/53umol"
 ```
 
 
@@ -114,7 +115,7 @@ run model without interaction since interaction caused collinearity issues
 
 ```{r ulva}
 all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + 
-                                 (1 | plant.ID) + (1 | run), data = ulva)
+                                 (1 | plant.ID) + (1 | lunar.phase), data = ulva)
 ```
 
 Make a histogram of the data for Ulva
@@ -186,7 +187,7 @@ ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) +
   geom_boxplot(size=0.5) + 
   geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = FALSE) + 
   labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "A", subtitle = "Ulva lactuca") + 
-  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-100, 200) + stat_mean() + 
   geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
   theme_bw() +
@@ -266,7 +267,7 @@ hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) +
   geom_boxplot(size=0.5) + 
   geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = TRUE) + 
   labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "B", subtitle = "Hypnea musciformis") + 
-  scale_x_discrete(labels = c("35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-100, 200) + stat_mean() + 
   geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
   theme_bw() +
