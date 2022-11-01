@@ -148,6 +148,13 @@ ulva_growth_etr_graph <- ggplot(ulva, aes(x=rETRmax, y=growth_rate)) +
        y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
 ulva_growth_etr_graph
 
+#plot a regression between the photosynthetic independent variables of interest and growth rate
+ulva_growth_etr_ek_graph <- ggplot(ulva, aes(x=rETRmax, y=ek.1)) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE, aes(color = Treatment)) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Ulva lactuca rETRmax vs Ek", x = "rETRmax (μmols electrons m-2 s-1)", 
+       y = "Ek (μmols photons m-2 s-1)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
+ulva_growth_etr_ek_graph
 
 #________________________________________________________________________________________
 
@@ -267,6 +274,14 @@ hypnea_growth_etr_graph
 
 #summarize the means
 hypnea %>% group_by(Treatment) %>% summarise_at(vars(rETRmax), list(mean = mean))
+
+#plot a regression between the photosynthetic independent variables of interest and growth rate
+hypnea_growth_etr_ek_graph <- ggplot(hypnea, aes(x=rETRmax, y=ek.1)) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE, aes(color = Treatment)) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Hypnea musciformis rETRmax vs Ek", x = "rETRmax (μmols electrons m-2 s-1)", 
+       y = "Ek (μmols photons m-2 s-1)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
+hypnea_growth_etr_ek_graph
 #____________________________________________________________________________________
 
 ###run model for Hypnea and Ek
