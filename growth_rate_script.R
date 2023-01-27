@@ -23,9 +23,10 @@ library(gt)
 library(purrr)
 library(stringr)
 library(tidyr)
+library(piecewiseSEM)
 
 #open weight dataset and make columns for growth rate from initial and final weights
-all_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_102222.csv")
+all_growth <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_011723.csv")
 
 #make a new column for weight change (difference final from initial)
 all_growth$growth_rate_percent <- (all_growth$final.weight - all_growth$Initial.weight) / all_growth$Initial.weight * 100
@@ -55,19 +56,18 @@ all_growth$RLC.order <- as.factor(all_growth$RLC.order)
 all_growth$lunar.phase <- as.factor(all_growth$lunar.phase)
 
 #toggle between the species for output
-hypnea <- subset(all_growth, Species == "Hm")
-ulva <- subset(all_growth, Species == "Ul")
+hypnea <- subset(all_growth, Species == "Hm" & growth_rate_percent > -87.96837)
+ulva <- subset(all_growth, Species == "Ul" & treatment != 2.5)
 
 #create subsets for the plots
-ulva <- subset(all_growth, Species == "Ul")
 ulva$treatment_graph[ulva$treatment == 0] <- "1) 35ppt/0.5umol"
 ulva$treatment_graph[ulva$treatment == 1] <- "2) 35ppt/14umol" 
 ulva$treatment_graph[ulva$treatment == 2] <- "3) 28ppt/27umol" 
 ulva$treatment_graph[ulva$treatment == 3] <- "5) 18ppt/53umol" 
 ulva$treatment_graph[ulva$treatment == 4] <- "6) 11ppt/80umol"
-ulva$treatment_graph[ulva$treatment == 2.5] <- "4) 28ppt/53umol"
+#ulva$treatment_graph[ulva$treatment == 2.5] <- "4) 28ppt/53umol"
 
-hypnea <- subset(all_growth, Species == "Hm")
+
 hypnea$treatment_graph[hypnea$treatment == 0] <- "1) 35ppt/0.5umol"
 hypnea$treatment_graph[hypnea$treatment == 1] <- "2) 35ppt/14umol" 
 hypnea$treatment_graph[hypnea$treatment == 2] <- "3) 28ppt/27umol" 
@@ -92,7 +92,7 @@ qqline(resid(all_growth_model_noint))
 
 #check the performance of the model for dataset: ulva
 performance::check_model(all_growth_model_noint)
-
+rsquared(all_growth_model_noint)
 r.squaredGLMM(all_growth_model_noint)
 summary(all_growth_model_noint)
 #view random effects levels
@@ -118,9 +118,9 @@ plot(allEffects(all_growth_model_noint))
 ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
   geom_boxplot(size=0.5) + 
   geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = FALSE) + 
-  labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "A", subtitle = "Ulva lactuca") + 
-  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
-  ylim(-100, 200) + stat_mean() + 
+  labs(x="salinity/nitrate", y= "8-Day Growth (%)", title= "A", subtitle = "Ulva lactuca") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-75, 200) + stat_mean() + 
   geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
   theme_bw() +
   theme(plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
@@ -145,6 +145,7 @@ qqline(resid(all_growth_model_noint))
 
 #check the performance of the model for each dataset: ulva and hypnea
 performance::check_model(all_growth_model_noint)
+model_performance(all_growth_model_noint)
 
 r.squaredGLMM(all_growth_model_noint)
 summary(all_growth_model_noint)
@@ -170,7 +171,7 @@ hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) +
   geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = TRUE) + 
   labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "B", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
-  ylim(-100, 200) + stat_mean() + 
+  ylim(-75, 200) + stat_mean() + 
   geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
   theme_bw() +
   theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
