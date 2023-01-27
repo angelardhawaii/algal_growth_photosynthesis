@@ -72,6 +72,7 @@ growth_rate$treatment <- as.factor(growth_rate$treatment)
 #make a new column for weight change (difference final from initial)
 growth_rate$growth_rate_percent <- (growth_rate$final.weight - growth_rate$Initial.weight) / growth_rate$Initial.weight * 100
 
+#only removing hm6-4 on 10/29/21 because it was white and looked dead
 gr_ulva <- subset(growth_rate, Species == "Ul")
 gr_hypnea <- subset(growth_rate, Species == "Hm" & growth_rate_percent > -87.96837)
 

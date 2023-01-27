@@ -56,6 +56,7 @@ all_growth$RLC.order <- as.factor(all_growth$RLC.order)
 all_growth$lunar.phase <- as.factor(all_growth$lunar.phase)
 
 #toggle between the species for output
+#only removing hm6-4 on 10/29/21 because it was white and looked dead
 hypnea <- subset(all_growth, Species == "Hm" & growth_rate_percent > -87.96837)
 ulva <- subset(all_growth, Species == "Ul" & treatment != 2.5)
 
