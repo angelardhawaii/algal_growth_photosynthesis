@@ -83,10 +83,10 @@ all_growth$RLC.order <- as.factor(all_growth$RLC.order)
 ```
 
 Create subset of the data to isolate the species
-Remove the replicate that was dead with < -87% growth (photo verified it was dead)
-
+Remove hm6-4 on 11/12/21 because it was dead and had no D9 RLC (final weight 0.1017)
+and hm6-4 on 10/29/21 because it was white and also looked dead
 ```{r}
-hypnea <- subset(all_growth, Species == "Hm" & growth_rate_percent > -87.96837)
+hypnea <- subset(all_growth, Species == "Hm" & growth_rate_percent > -87.96837 & final.weight != 0.1017)
 ulva <- subset(all_growth, Species == "Ul" & treatment != 2.5)
 ```
 
