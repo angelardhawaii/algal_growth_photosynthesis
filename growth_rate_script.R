@@ -80,7 +80,8 @@ hypnea$treatment_graph[hypnea$treatment == 2.5] <- "4) 28ppt/53umol"
 
 #ULVA 
 #run model without interaction (0 in model permits display of four levels of treatments - no intercept)
-all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) + (1 | lunar.phase), data = ulva)
+all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature +
+                                 (1 | plant.ID) + (1 | lunar.phase), data = ulva, REML = TRUE)
 
 #make a histogram of the data for ulva
 hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"), col = "olivedrab3", labels = TRUE)
@@ -110,7 +111,7 @@ welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = ulva, 
 welch_anova_temp
 
 
-games_howell_test(ulva, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = TRUE)
+games_howell_test(ulva, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = FALSE)
 
 #temperature has no significant effect
 
@@ -132,7 +133,8 @@ ulva %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(me
 
 #HYPNEA 
 #run model without interaction  (0 in model permits display of four levels of treatments - no intercept)
-all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) + (1 | run) + (1 | RLC.order), data = hypnea)
+all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) +
+                                 (1 | run) + (1 | RLC.order), data = hypnea, REML = TRUE)
 
 #OR make a histogram of the data for hypnea
 hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), col = "maroon", labels = TRUE)

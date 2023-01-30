@@ -118,7 +118,7 @@ run model without interaction since interaction caused collinearity issues
 
 ```{r ulva}
 all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + 
-                                 (1 | plant.ID) + (1 | lunar.phase), data = ulva)
+                                 (1 | plant.ID) + (1 | lunar.phase), data = ulva, REML = TRUE)
 ```
 
 Make a histogram of the data for Ulva
@@ -201,7 +201,7 @@ ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) +
 # HYPNEA 
 ```{r hypnea}
 all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + 
-                                 (1 | run) + (1 | plant.ID) + (1 | RLC.order), data = hypnea)
+                                 (1 | run) + (1 | plant.ID) + (1 | RLC.order), data = hypnea, REML = TRUE)
 ```
 
 These outputs show the model is acceptable for the data

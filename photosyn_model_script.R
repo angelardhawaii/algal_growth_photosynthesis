@@ -46,8 +46,8 @@ all_runs_photosyn_data$deltaNPQ <- as.factor(all_runs_photosyn_data$deltaNPQ)
 
  
 #toggle between the species for output. Use Day 9 for final analysis
-#recent change: removing the very odd ek.1 value of 559.4 in hypnea dataset
-hypnea <- subset(all_runs_photosyn_data, Species == "hm" & RLC.Day == 9)
+#There was no D9 RLC for hm6-4 on 11/12/21 but had to remove hm6-4 from 10/9/21 below to match growth data
+hypnea <- subset(all_runs_photosyn_data, Species == "hm" & RLC.Day == 9 & uid != "2021-10-09_hm6-4")
 hypnea$treatment_graph[hypnea$Treatment == 0] <- "1) 35ppt/0.5umol"
 hypnea$treatment_graph[hypnea$Treatment == 1] <- "2) 35ppt/14umol" 
 hypnea$treatment_graph[hypnea$Treatment == 2] <- "3) 28ppt/27umol" 
@@ -72,9 +72,10 @@ growth_rate$treatment <- as.factor(growth_rate$treatment)
 #make a new column for weight change (difference final from initial)
 growth_rate$growth_rate_percent <- (growth_rate$final.weight - growth_rate$Initial.weight) / growth_rate$Initial.weight * 100
 
-#only removing hm6-4 on 10/29/21 because it was white and looked dead
+#for Hypnea remove hm6-4 on 11/12 that had no d9 RLC (final weight 0.1017)
+# and hm6-4 on 10/9/21 because it was white and also looked dead 
 gr_ulva <- subset(growth_rate, Species == "Ul")
-gr_hypnea <- subset(growth_rate, Species == "Hm" & growth_rate_percent > -87.96837)
+gr_hypnea <- subset(growth_rate, Species == "Hm" & final.weight != 0.1017 & growth_rate_percent > -87.96837)
 
 ulva$growth_rate <- round((gr_ulva$final.weight - gr_ulva$Initial.weight) / gr_ulva$Initial.weight * 100, digits = 2)
 hypnea$growth_rate <- round((gr_hypnea$final.weight - gr_hypnea$Initial.weight) / gr_hypnea$Initial.weight * 100, digits = 2)
@@ -220,7 +221,7 @@ ulva %>% group_by(Treatment) %>% summarise_at(vars(ek.1), list(mean = mean))
 #hm1-2 for both rETRmax and Ek -- leaving them in dataset because no good reason to believe not good data
 
 #run model without interaction
-all_runs_photosyn_model_hyp <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID), data = hypnea, REML = FALSE)
+all_runs_photosyn_model_hyp <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
 
 
 #make a histogram and residual plots of the data for hypnea
