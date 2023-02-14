@@ -1,0 +1,261 @@
+---
+title: "Linear Mixed Model for rETRmax in Ulva lactuca and Hypnea musciformis"
+author: "Angela Richards Donà"
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    fig_width: 9
+    fig_height: 7
+---
+
+All runs Ulva & Hypnea rETRmax Analysis, Script Chunks, and Plots
+
+This is the analysis of all the Ulva lactuca salinity and nutrient experiments 
+conducted on the lanai in St. John 616 from September 2021 to October 2022. 
+These experiments incorporated four paired salinity
+and nutrient treatments with three temperatures. 
+Each of the first four runs produced an n = 2 and was repeated
+initially 8 times for a total of n = 16.
+Data gaps were identified and filled in February, April, and October 2022. 
+This output reflects all data totaling five treatments for Ulva lactuca and six for Hypnea musciformis.
+
+Packages loaded:
+
+```{r message=FALSE}
+library(lme4)
+library(lmerTest)
+library(afex)
+library(effects)
+library(car)
+library(MuMIn)
+library (dplyr)
+library(emmeans)
+library(DHARMa)
+library(performance)
+library(patchwork)
+library(rstatix)
+#for plots and tables
+library(ggplot2)
+library(ggpubr)
+library(forcats)
+library(RColorBrewer)
+library(tidyverse)
+library(sjPlot)
+library(sjmisc)
+library(mmtable2)
+library(gt)
+library(purrr)
+library(stringr)
+library(tidyr)
+```
+
+Load this dataset normalized to quantum efficiency of photosynthesis per Silsbe and Kromkamp 2012
+```{r}
+all_runs_photosyn_data <- read.csv("../data_input/hyp_ulva_all_runs_ek_alpha_normalized.csv")
+```
+
+Assign several variables as factors
+```{r}
+all_runs_photosyn_data$Run <- as.factor(all_runs_photosyn_data$Run)
+all_runs_photosyn_data$Temperature <- as.factor(all_runs_photosyn_data$Temp...C.)
+all_runs_photosyn_data$Treatment <- as.factor(as.character(all_runs_photosyn_data$Treatment))
+all_runs_photosyn_data$deltaNPQ <- as.factor(all_runs_photosyn_data$deltaNPQ)
+```
+ 
+Subset the species for output. Use Day 9 for final analysis. Remove treatment 2.5 from Ulva dataset
+```{r}
+ulva <- subset(all_runs_photosyn_data, Species == "ul" & RLC.Day == 9 & Treatment != 2.5)
+ulva$treatment_graph[ulva$Treatment == 0] <- "1) 35ppt/0.5umol"
+ulva$treatment_graph[ulva$Treatment == 1] <- "2) 35ppt/14umol" 
+ulva$treatment_graph[ulva$Treatment == 2] <- "3) 28ppt/27umol" 
+ulva$treatment_graph[ulva$Treatment == 3] <- "5) 18ppt/53umol" 
+ulva$treatment_graph[ulva$Treatment == 4] <- "6) 11ppt/80umol"
+ulva$treatment_graph[ulva$Treatment == 2.5] <- "4) 28ppt/53umol"
+```
+
+#ULVA rETRmax________________________________________________________________
+
+Make a histogram of the data
+```{r}
+ulva %>% ggplot(aes(rETRmax)) +
+  geom_histogram(binwidth=5, fill = "#5BB300", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
+```
+
+Run model without interaction between the treatments and temperature
+```{r}
+ulva_retrmax_model <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva)
+```
+
+Make residual plots of the data for ulva
+```{r}
+hist(resid(ulva_retrmax_model))
+plot(resid(ulva_retrmax_model) ~ fitted(ulva_retrmax_model))
+qqnorm(resid(ulva_retrmax_model))
+qqline(resid(ulva_retrmax_model))
+```
+
+Check the performance of the model, make a table, plot effects, and get r2
+```{r}
+performance ::check_model(ulva_retrmax_model)
+r.squaredGLMM(ulva_retrmax_model)
+summary(ulva_retrmax_model)
+tab_model(ulva_retrmax_model, show.intercept = TRUE, show.se = TRUE, show.stat = TRUE, show.df = TRUE, show.zeroinf = TRUE)
+plot(allEffects(ulva_retrmax_model))
+```
+
+Construct null model to perform likelihood ratio test REML must be FALSE
+```{r}
+ulva_retrmax_treatment_null <- lmer(formula = rETRmax ~ Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+ulva_retrmax_model2 <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+anova(ulva_retrmax_treatment_null, ulva_retrmax_model2)
+ulva_retrmax_temperature_null <- lmer(formula = rETRmax ~ Treatment + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+ulva_retrmax_model3 <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+anova(ulva_retrmax_temperature_null, ulva_retrmax_model3)
+```
+
+Plots
+```{r}
+ulva %>% ggplot(aes(treatment_graph, rETRmax)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  labs(x="salinity/nitrate", y= "rETRmax (μmols electrons m-2 s-1)", title= "A", subtitle = "Ulva lactuca") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-1, 170) + stat_mean() + 
+  scale_color_manual(values = c("#295102", "#7CB950", "#BDE269")) +
+  geom_hline(yintercept=0, color = "red", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+```
+
+Summarize the means for rETRmax
+```{r}
+ulva %>% group_by(Treatment) %>% summarise_at(vars(rETRmax), list(mean = mean))
+ulva %>% group_by(Run) %>% summarise_at(vars(rETRmax), list(mean = mean))
+ulva %>% group_by(Treatment, RLC.Day) %>% summarise_at(vars(rETRmax), list(mean = mean))
+```
+
+Add growth rate to the dataset and subset by species
+```{r}
+growth_rate <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_011723.csv")
+growth_rate$Species <- as.factor(growth_rate$Species)
+growth_rate$treatment <- as.factor(growth_rate$treatment)
+growth_rate$lunar.phase <- as.factor(growth_rate$lunar.phase)
+```
+
+Make a new column for weight change (difference final from initial)
+```{r}
+growth_rate$growth_rate_percent <- (growth_rate$final.weight - growth_rate$Initial.weight) / growth_rate$Initial.weight * 100
+gr_ulva <- subset(growth_rate, Species == "Ul" & treatment != 2.5)
+ulva$growth_rate <- round((gr_ulva$final.weight - gr_ulva$Initial.weight) / gr_ulva$Initial.weight * 100, digits = 2)
+ulva$lunar.phase <- (gr_ulva$lunar.phase)
+```
+
+Plot a regression between the photosynthetic independent variables of interest and growth rate
+```{r}
+ulva_growth_etr_graph <- ggplot(ulva, aes(x=rETRmax, y=growth_rate)) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE, aes(color = Treatment)) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Ulva lactuca rETRmax vs Growth Rate", x = "rETRmax (μmols electrons m-2 s-1)", 
+       y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
+ulva_growth_etr_graph
+```
+
+
+
+HYPNEA____________________________________________________________________________________________________________
+ 
+There was no D9 RLC for hm6-4 on 11/12/21 but had to remove hm6-4 from 10/9/21 below to match growth data because
+replicate appeared dead
+```{r}
+hypnea <- subset(all_runs_photosyn_data, Species == "hm" & RLC.Day == 9 & uid != "2021-10-09_hm6-4")
+hypnea$treatment_graph[hypnea$Treatment == 0] <- "1) 35ppt/0.5umol"
+hypnea$treatment_graph[hypnea$Treatment == 1] <- "2) 35ppt/14umol" 
+hypnea$treatment_graph[hypnea$Treatment == 2] <- "3) 28ppt/27umol" 
+hypnea$treatment_graph[hypnea$Treatment == 3] <- "5) 18ppt/53umol" 
+hypnea$treatment_graph[hypnea$Treatment == 4] <- "6) 11ppt/80umol"
+hypnea$treatment_graph[hypnea$Treatment == 2.5] <- "4) 28ppt/53umol"
+```
+
+For Hypnea remove hm6-4 on 11/12 that had no d9 RLC (final weight 0.1017)
+and hm6-4 on 10/9/21 because it was white and also white and dead
+hm1-1 on 10/12/22 and hm1-2 on 4/29/22 causing issues of influential observations
+hm1-2 for both rETRmax and Ek -- leaving them in dataset because no good reason to believe not good data
+```{r}
+gr_hypnea <- subset(growth_rate, Species == "Hm" & final.weight != 0.1017 & growth_rate_percent > -87.96837)
+hypnea$growth_rate <- round((gr_hypnea$final.weight - gr_hypnea$Initial.weight) / gr_hypnea$Initial.weight * 100, digits = 2)
+```
+
+Make a histogram for hypnea
+```{r}
+hist(hypnea$rETRmax, main = paste("Hypnea musciformis"), col = "maroon", labels = TRUE)
+
+hypnea %>% ggplot(aes(rETRmax)) +
+  geom_histogram(binwidth=5, fill = "#7D0033", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
+```
+
+Run model for rETRmax
+```{r}
+hyp_retrmax_model <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea)
+```
+
+Make residual plots of the data 
+```{r}
+hist(resid(hyp_retrmax_model))
+plot(resid(hyp_retrmax_model) ~ fitted(hyp_retrmax_model))
+qqnorm(resid(hyp_retrmax_model))
+qqline(resid(hyp_retrmax_model))
+```
+
+Check the performance of the model, get r2, make table, and plot effects
+```{r}
+performance::check_model(hyp_retrmax_model)
+r.squaredGLMM(hyp_retrmax_model)
+summary(hyp_retrmax_model)
+tab_model(hyp_retrmax_model, show.intercept = TRUE, show.se = TRUE, show.stat = TRUE, show.df = TRUE, show.zeroinf = TRUE)
+plot(allEffects(hyp_retrmax_model))
+```
+
+Construct null model to perform likelihood ratio test REML must be FALSE
+```{r}
+hypnea_retrmax_treatment_null <- lmer(formula = rETRmax ~ Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+hypnea_retrmax_model2 <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+anova(hypnea_retrmax_treatment_null, hypnea_retrmax_model2)
+hypnea_retrmax_temperature_null <- lmer(formula = rETRmax ~ Treatment + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+hypnea_retrmax_model3 <- lmer(formula = rETRmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+anova(hypnea_retrmax_temperature_null, hypnea_retrmax_model3)
+```
+
+Plots
+```{r}
+hypnea %>% ggplot(aes(treatment_graph, rETRmax)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  labs(x="Treatment", y= "rETRmax (μmols electrons m-2 s-1)", title= "B", subtitle = "Hypnea musciformis") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-1, 170) + stat_mean() + 
+  scale_color_manual(values = c("#9C0627", "#BB589F", "#F4B4E2")) +
+  geom_hline(yintercept=0, color = "red", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+```
+
+Plot a regression between the photosynthetic independent variables of interest and growth rate
+```{r}
+hypnea_growth_etr_graph <- ggplot(hypnea, aes(x=rETRmax, y=growth_rate)) + 
+  geom_point(alpha = 0.5, size = 3, aes(color = Treatment), show.legend = TRUE) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Hypnea musciformis rETRmax vs Growth Rate", x = "rETRmax (μmols electrons m-2 s-1)", 
+       y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor(label.y = 150)
+hypnea_growth_etr_graph
+```
+
+Summarize the means
+```{r}
+hypnea %>% group_by(Treatment) %>% summarise_at(vars(rETRmax), list(mean = mean))
+hypnea %>% group_by(Treatment, RLC.Day) %>% summarise_at(vars(rETRmax), list(mean = mean))
+```
+

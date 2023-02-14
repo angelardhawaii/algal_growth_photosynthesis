@@ -55,10 +55,9 @@ all_growth$RLC.order <- as.factor(all_growth$RLC.order)
 # assign lunar phase as factor
 all_growth$lunar.phase <- as.factor(all_growth$lunar.phase)
 
-#toggle between the species for output
-#removing hm6-4 on 11/12/21 because it was dead and had no D9 RLC (final weight 0.1017)
-# and hm6-4 on 10/29/21 because it was white and also looked dead
-hypnea <- subset(all_growth, Species == "Hm" & growth_rate_percent > -87.96837 & final.weight != 0.1017)
+
+#ULVA
+#subset data by species
 ulva <- subset(all_growth, Species == "Ul" & treatment != 2.5)
 
 #create subsets for the plots
@@ -70,6 +69,61 @@ ulva$treatment_graph[ulva$treatment == 4] <- "6) 11ppt/80umol"
 #ulva$treatment_graph[ulva$treatment == 2.5] <- "4) 28ppt/53umol"
 
 
+#make a histogram of the data for ulva
+hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"), col = "olivedrab3", labels = TRUE)
+#or
+ulva %>% ggplot(aes(growth_rate_percent)) +
+  geom_histogram(binwidth=5, fill = "#5BB300", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
+
+#run model without interaction
+growth_model_ulva <- lmer(formula = growth_rate_percent ~ treatment + temperature +
+                                 (1 | plant.ID) + (1 | lunar.phase), data = ulva, REML = TRUE)
+
+hist(resid(growth_model_ulva))
+plot(resid(growth_model_ulva) ~ fitted(growth_model_ulva))
+qqnorm(resid(growth_model_ulva))
+qqline(resid(growth_model_ulva))
+
+#check the performance of the model for dataset: ulva
+performance::check_model(growth_model_ulva)
+rsquared(growth_model_ulva)
+summary(growth_model_ulva)
+#view random effects levels
+ranef(growth_model_ulva)
+tab_model(growth_model_ulva, show.intercept = TRUE, show.se = TRUE, show.stat = TRUE, show.df = TRUE, show.zeroinf = TRUE)
+plot(allEffects(growth_model_ulva))
+
+#construct null model to perform likelihood ratio test REML must be FALSE
+ulva_growth_treatment_null <- lmer(formula = growth_rate_percent ~ temperature + (1 | lunar.phase) + (1 | plant.ID), data = ulva, REML = FALSE)
+ulva_growth_model2 <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 |lunar.phase) + (1 | plant.ID), data = ulva, REML = FALSE)
+anova(ulva_growth_treatment_null, ulva_growth_model2)
+ulva_growth_temperature_null <- lmer(formula = growth_rate_percent ~ treatment + (1 | lunar.phase) + (1 | plant.ID), data = ulva, REML = FALSE)
+ulva_growth_model3 <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | lunar.phase) + (1 | plant.ID), data = ulva, REML = FALSE)
+anova(ulva_growth_temperature_null, ulva_growth_model3)
+
+#plots
+ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = temperature), show.legend = TRUE) + 
+  labs(x="salinity/nitrate", y= "8-Day Growth (%)", title= "A", subtitle = "Ulva lactuca") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-75, 200) + stat_mean() + 
+  scale_color_manual(values = c("#295102", "#7CB950", "#BDE269")) +
+  geom_hline(yintercept=4.46, color = "red", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+
+#summarize the means
+ulva %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
+
+
+#HYPNEA______________________________________________________________________
+#removing hm6-4 on 11/12/21 because it was dead and had no D9 RLC (final weight 0.1017)
+# and hm6-4 on 10/29/21 because it was white and also looked dead
+hypnea <- subset(all_growth, Species == "Hm" & growth_rate_percent > -87.96837 & final.weight != 0.1017)
+#for plots
 hypnea$treatment_graph[hypnea$treatment == 0] <- "1) 35ppt/0.5umol"
 hypnea$treatment_graph[hypnea$treatment == 1] <- "2) 35ppt/14umol" 
 hypnea$treatment_graph[hypnea$treatment == 2] <- "3) 28ppt/27umol" 
@@ -77,108 +131,50 @@ hypnea$treatment_graph[hypnea$treatment == 3] <- "5) 18ppt/53umol"
 hypnea$treatment_graph[hypnea$treatment == 4] <- "6) 11ppt/80umol"
 hypnea$treatment_graph[hypnea$treatment == 2.5] <- "4) 28ppt/53umol"
 
-
-#ULVA 
-#run model without interaction (0 in model permits display of four levels of treatments - no intercept)
-all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature +
-                                 (1 | plant.ID) + (1 | lunar.phase), data = ulva, REML = TRUE)
-
-#make a histogram of the data for ulva
-hist(ulva$growth_rate_percent, main = paste("Ulva lactuca Growth Rate (%)"), col = "olivedrab3", labels = TRUE)
-#or
-ulva %>% ggplot(aes(growth_rate_percent)) +
-  geom_histogram(binwidth=5, fill = "#5BB300", color = "black", size = 0.25, alpha = 0.85) +
-  theme_bw()
-plot(resid(all_growth_model_noint) ~ fitted(all_growth_model_noint))
-qqnorm(resid(all_growth_model_noint))
-qqline(resid(all_growth_model_noint))
-
-#check the performance of the model for dataset: ulva
-performance::check_model(all_growth_model_noint)
-rsquared(all_growth_model_noint)
-r.squaredGLMM(all_growth_model_noint)
-summary(all_growth_model_noint)
-#view random effects levels
-ranef(all_growth_model_noint)
-
-#check for equal variance
-bartlett.test(growth_rate_percent ~ treatment, data = ulva)
-bartlett.test(growth_rate_percent ~ temperature, data = ulva)
-#run Welch's ANOVA if not equal variance
-welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = ulva, var.equal = FALSE)
-welch_anova_treatment
-welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = ulva, var.equal = FALSE)
-welch_anova_temp
-
-
-games_howell_test(ulva, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = FALSE)
-
-#temperature has no significant effect
-
-tab_model(all_growth_model_noint)
-plot(allEffects(all_growth_model_noint))
-
-ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
-  geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = FALSE) + 
-  labs(x="salinity/nitrate", y= "8-Day Growth (%)", title= "A", subtitle = "Ulva lactuca") + 
-  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
-  ylim(-75, 200) + stat_mean() + 
-  geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
-  theme_bw() +
-  theme(plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
-#summarize the means
-ulva %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
-
-
-#HYPNEA 
-#run model without interaction  (0 in model permits display of four levels of treatments - no intercept)
-all_growth_model_noint <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) +
-                                 (1 | run) + (1 | RLC.order), data = hypnea, REML = TRUE)
-
-#OR make a histogram of the data for hypnea
+#make a histogram of the data for hypnea
 hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), col = "maroon", labels = TRUE)
 
 hypnea %>% ggplot(aes(growth_rate_percent)) +
   geom_histogram(binwidth=5, fill = "#990066", color = "black", size = 0.25, alpha = 0.85) +
   theme_bw()
 
-plot(resid(all_growth_model_noint) ~ fitted(all_growth_model_noint))
-qqnorm(resid(all_growth_model_noint))
-qqline(resid(all_growth_model_noint))
+#run model without interaction
+growth_model_hypnea <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) +
+                                 (1 | run) + (1 | RLC.order), data = hypnea, REML = TRUE)
 
-#check the performance of the model for each dataset: ulva and hypnea
-performance::check_model(all_growth_model_noint)
-model_performance(all_growth_model_noint)
 
-r.squaredGLMM(all_growth_model_noint)
-summary(all_growth_model_noint)
-ranef(all_growth_model_noint)
+#plot residuals for hypnea growth model
+plot(resid(growth_model_hypnea) ~ fitted(growth_model_hypnea))
+qqnorm(resid(growth_model_hypnea))
+qqline(resid(growth_model_hypnea))
 
-#check for equal variance
-bartlett.test(growth_rate_percent ~ treatment, data = hypnea)
-bartlett.test(growth_rate_percent ~ temperature, data = hypnea)
-#run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
-welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = hypnea, var.equal = FALSE)
-welch_anova_treatment
-welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = hypnea, var.equal = FALSE)
-welch_anova_temp
-games_howell_test(hypnea, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = TRUE)
+#check the performance of the model
+performance::check_model(growth_model_hypnea)
+r.squaredGLMM(growth_model_hypnea)
+summary(growth_model_hypnea)
+ranef(growth_model_hypnea)
+tab_model(growth_model_hypnea, show.intercept = TRUE, show.se = TRUE, show.stat = TRUE, show.df = TRUE, show.zeroinf = TRUE)
+plot(allEffects(growth_model_hypnea))
 
-#temperature effect not significant
-
-tab_model(all_growth_model_noint)
-plot(allEffects(all_growth_model_noint))
+#construct null model to perform likelihood ratio test REML must be FALSE
+hypnea_growth_treatment_null <- lmer(formula = growth_rate_percent ~ temperature + (1 | plant.ID) + (1 | run) + (1 | RLC.order), data = hypnea, REML = FALSE)
+hypnea_growth_model2 <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) + (1 | run) + (1 | RLC.order), data = hypnea, REML = FALSE)
+anova(hypnea_growth_treatment_null, hypnea_growth_model2)
+hypnea_growth_temperature_null <- lmer(formula = growth_rate_percent ~ treatment + (1 | plant.ID) + (1 | run) + (1 | RLC.order), data = hypnea, REML = FALSE)
+hypnea_growth_model3 <- lmer(formula = growth_rate_percent ~ treatment + temperature + (1 | plant.ID) + (1 | run) + (1 | RLC.order), data = hypnea, REML = FALSE)
+anova(hypnea_growth_temperature_null, hypnea_growth_model3)
 
 hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.5, size = 3, aes(color = temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = temperature), show.legend = TRUE) + 
   labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "B", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-75, 200) + stat_mean() + 
-  geom_hline(yintercept=0, color = "purple", size = 0.5, alpha = 0.5) +
+  scale_color_manual(values = c("#9C0627", "#BB589F", "#F4B4E2")) +
+  geom_hline(yintercept=0, color = "red", size = 0.5, alpha = 0.5) +
   theme_bw() +
-  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), plot.subtitle = element_text(face = "italic", vjust = -20, hjust = 0.05))
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
 
 #summarize the means
 hypnea %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
@@ -195,3 +191,29 @@ hypnea %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(
 #TukeyHSD(ulva_growth_model_aov, "treatment", ordered = FALSE)
 #hypnea_growth_model_aov <- aov(growth_rate_percent ~ treatment + temperature, data = hypnea)
 #TukeyHSD(hypnea_growth_model_aov, "treatment", ordered = FALSE)
+
+
+
+#temperature has no significant effect
+
+#check for equal variance
+bartlett.test(growth_rate_percent ~ treatment, data = ulva)
+bartlett.test(growth_rate_percent ~ temperature, data = ulva)
+#run Welch's ANOVA if not equal variance
+welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = ulva, var.equal = FALSE)
+welch_anova_treatment
+welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = ulva, var.equal = FALSE)
+welch_anova_temp
+games_howell_test(ulva, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = FALSE)
+
+#check for equal variance
+bartlett.test(growth_rate_percent ~ treatment, data = hypnea)
+bartlett.test(growth_rate_percent ~ temperature, data = hypnea)
+#run Welch's ANOVA if not equal variance (p = 0.01426, not equal)
+welch_anova_treatment <- oneway.test(growth_rate_percent ~ treatment, data = hypnea, var.equal = FALSE)
+welch_anova_treatment
+welch_anova_temp <- oneway.test(growth_rate_percent ~ temperature, data = hypnea, var.equal = FALSE)
+welch_anova_temp
+games_howell_test(hypnea, growth_rate_percent ~ treatment, conf.level = 0.95, detailed = TRUE)
+
+#temperature effect not significant
