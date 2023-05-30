@@ -59,7 +59,7 @@ ulva$treatment_graph[ulva$Treatment == 2.5] <- "4) 28ppt/53umol"
 ulva %>% ggplot(aes(ek.1)) +
   geom_histogram(binwidth=5, fill = "#5BB300", color = "black", size = 0.25, alpha = 0.85) +
   theme_bw()
-
+hist(ulva$ek.1, main = paste("Ulva lactuca"), col = "olivedrab3", labels = TRUE)
 #Ulva Ek model
 
 ulva_ek_model <- lmer(formula = ek.1 ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva)
@@ -77,7 +77,7 @@ anova(ulva_ek_temperature_null, ulva_ek_model3)
 tab_model(ulva_ek_model)
 plot(allEffects(ulva_ek_model))
 #make a histogram and residual plots of the data for ulva ek
-hist(ulva$ek.1, main = paste("Ulva lactuca"), col = "olivedrab3", labels = TRUE)
+hist(resid(ulva_ek_model))
 plot(resid(ulva_ek_model) ~ fitted(ulva_ek_model))
 qqnorm(resid(ulva_ek_model))
 qqline(resid(ulva_ek_model))
@@ -90,11 +90,11 @@ r.squaredGLMM(ulva_ek_model)
 ulva %>% ggplot(aes(treatment_graph, ek.1)) + 
   geom_boxplot(size=0.5) + 
   geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
-  labs(x="salinity/nitrate", y= "Day 9 Ek (μmols photons m-2 s-1)", title= "A", subtitle = "Ulva lactuca") + 
+  labs(x="salinity/nitrate", y= "Day 9 Ek (μmols photons m-2 s-1)", title= "C", subtitle = "Ulva lactuca") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-1, 250) + stat_mean() +
   scale_color_manual(values = c("#295102", "#7CB950", "#BDE269")) +
-  geom_hline(yintercept=0, color = "red", size = 0.5, alpha = 0.5) +
+  geom_hline(yintercept=50, color = "red", size = 0.5, alpha = 0.5) +
   theme_bw() +
   theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
         plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
@@ -125,6 +125,7 @@ ulva_growth_ek_graph
 
 #summarize the means for Ek
 ulva %>% group_by(Treatment) %>% summarise_at(vars(ek.1), list(mean = mean))
+ulva %>% group_by(Temperature) %>% summarise_at(vars(ek.1), list(mean = mean))
 
 
 #Hypnea Ek____________________________________________________________________
@@ -160,6 +161,7 @@ hyp_ek_temp_null <- lmer(formula = ek.1 ~ Treatment + (1 | Run) + (1 | Plant.ID)
 hyp_ek_model3 <- lmer(formula = ek.1 ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
 anova(hyp_ek_temp_null, hyp_ek_model3)
 
+hist(resid(hyp_ek_model))
 plot(resid(hyp_ek_model) ~ fitted(hyp_ek_model))
 qqnorm(resid(hyp_ek_model))
 qqline(resid(hyp_ek_model))
@@ -178,11 +180,11 @@ plot(allEffects(hyp_ek_model))
 hypnea %>% ggplot(aes(treatment_graph, ek.1)) + 
   geom_boxplot(size=0.5) + 
   geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
-  labs(x="salinity/nitrate", y= "Ek (μmols photons m-2 s-1)", title= "B", subtitle = "Hypnea musciformis") + 
+  labs(x="salinity/nitrate", y= "Ek (μmols photons m-2 s-1)", title= "D", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-1, 250) + stat_mean() + 
   scale_color_manual(values = c("#9C0627", "#BB589F", "#F4B4E2")) +
-  geom_hline(yintercept=0, color = "red", size = 0.5, alpha = 0.5) +
+  geom_hline(yintercept=50, color = "red", size = 0.5, alpha = 0.5) +
   theme_bw() +
   theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
         plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
@@ -202,7 +204,7 @@ hypnea_growth_ek_graph
 
 #summarize the means
 hypnea %>% group_by(Treatment) %>% summarise_at(vars(ek.1), list(mean = mean))
-hypnea %>% group_by(Run) %>% summarise_at(vars(ek.1), list(mean = mean))
+hypnea %>% group_by(Temperature) %>% summarise_at(vars(ek.1), list(mean = mean))
 
 
 

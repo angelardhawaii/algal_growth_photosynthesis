@@ -117,7 +117,7 @@ ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) +
 
 #summarize the means
 ulva %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
-
+ulva %>% group_by(temperature) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
 
 #HYPNEA______________________________________________________________________
 #removing hm6-4 on 11/12/21 because it was dead and had no D9 RLC (final weight 0.1017)
@@ -130,6 +130,11 @@ hypnea$treatment_graph[hypnea$treatment == 2] <- "3) 28ppt/27umol"
 hypnea$treatment_graph[hypnea$treatment == 3] <- "5) 18ppt/53umol" 
 hypnea$treatment_graph[hypnea$treatment == 4] <- "6) 11ppt/80umol"
 hypnea$treatment_graph[hypnea$treatment == 2.5] <- "4) 28ppt/53umol"
+
+hypnea$temperature_graph[hypnea$temperature == 20] <- "20°C"
+hypnea$temperature_graph[hypnea$temperature == 27] <- "27°C"
+hypnea$temperature_graph[hypnea$temperature == 30] <- "30°C"
+
 
 #make a histogram of the data for hypnea
 hist(hypnea$growth_rate_percent, main = paste("Hypnea musciformis Growth Rate (%)"), col = "maroon", labels = TRUE)
@@ -175,9 +180,23 @@ hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) +
   theme_bw() +
   theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
         plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+#plot temperature
+hypnea %>% ggplot(aes(temperature_graph, growth_rate_percent)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.75, size = 5, aes(color = treatment), show.legend = TRUE) + 
+  labs(x="Temperature", y= "9-day Growth (%)", title= "F", subtitle = "Hypnea musciformis") + 
+  scale_x_discrete(labels = c("20°C", "27°C", "30°C")) + 
+  ylim(-1, 150) + stat_mean() + 
+  geom_hline(yintercept=50, color = "red", size = 0.5, alpha = 0.5) +
+  scale_color_manual(values = c("#9C0627", "#7CB950", "#F4B4E2", "#3311AA", "#3D96AA", "#F5B600")) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+
 
 #summarize the means
 hypnea %>% group_by(treatment) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
+hypnea %>% group_by(temperature) %>% summarise_at(vars(growth_rate_percent), list(mean = mean))
 
 
 

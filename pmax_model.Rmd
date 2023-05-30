@@ -1,0 +1,262 @@
+---
+title: "Pmax_model"
+output: 
+  html_document: 
+    fig_width: 9
+    fig_height: 9
+date: "2023-02-21"
+---
+#script to run model for photosynthesis data -- similar to growth_rate script
+```{r}
+library(lme4)
+library(lmerTest)
+library(afex)
+library(effects)
+library(car)
+library(MuMIn)
+library (dplyr)
+library(emmeans)
+library(DHARMa)
+library(performance)
+library(patchwork)
+library(rstatix)
+#for plots and tables
+library(ggplot2)
+library(ggpubr)
+library(forcats)
+library(RColorBrewer)
+library(tidyverse)
+library(sjPlot)
+library(sjmisc)
+library(mmtable2)
+library(gt)
+library(purrr)
+library(stringr)
+library(tidyr)
+```
+
+#load this file for rETR-based use per Silsbe and Kromkamp 2012
+#all_runs_photosyn_data <- read.csv("data_input/hyp_ulva_all_runs_ek_alpha.csv")
+
+#load this file for normalized to quantum efficiency of photosynthesis per same as above
+```{r}
+all_runs_photosyn_data <- read.csv("data_input/hyp_ulva_all_runs_ek_alpha_normalized.csv")
+```
+# assign run as a factor
+```{r}
+all_runs_photosyn_data$Run <- as.factor(all_runs_photosyn_data$Run)
+```
+
+#assign temperature as a factor
+```{r}
+all_runs_photosyn_data$Temperature <- as.factor(all_runs_photosyn_data$Temp...C.)
+```
+
+#assigns treatment as characters from integers then to factors
+```{r}
+all_runs_photosyn_data$Treatment <- as.factor(as.character(all_runs_photosyn_data$Treatment))
+```
+
+# assign deltaNPQ as a factor
+```{r}
+all_runs_photosyn_data$deltaNPQ <- as.factor(all_runs_photosyn_data$deltaNPQ)
+```
+
+#toggle between the species for output. Use Day 9 for final analysis
+```{r}
+ulva <- subset(all_runs_photosyn_data, Species == "ul" & RLC.Day == 9 & Treatment != 2.5)
+ulva$treatment_graph[ulva$Treatment == 0] <- "1) 35ppt/0.5umol"
+ulva$treatment_graph[ulva$Treatment == 1] <- "2) 35ppt/14umol" 
+ulva$treatment_graph[ulva$Treatment == 2] <- "3) 28ppt/27umol" 
+ulva$treatment_graph[ulva$Treatment == 3] <- "5) 18ppt/53umol" 
+ulva$treatment_graph[ulva$Treatment == 4] <- "6) 11ppt/80umol"
+ulva$treatment_graph[ulva$Treatment == 2.5] <- "4) 28ppt/53umol"
+```
+
+#ULVA pmax________________________________________________________________
+```{r}
+ulva %>% ggplot(aes(pmax)) +
+  geom_histogram(binwidth=5, fill = "#5BB300", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
+```
+
+#run model without interaction between the treatments and temperature
+```{r}
+ulva_pmax_model <- lmer(formula = pmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva)
+```
+
+#construct null model to perform likelihood ratio test REML must be FALSE
+```{r}
+ulva_pmax_treatment_null <- lmer(formula = pmax ~ Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+ulva_pmax_model2 <- lmer(formula = pmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+anova(ulva_pmax_treatment_null, ulva_pmax_model2)
+ulva_pmax_temperature_null <- lmer(formula = pmax ~ Treatment + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+ulva_pmax_model3 <- lmer(formula = pmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = ulva, REML = FALSE)
+anova(ulva_pmax_temperature_null, ulva_pmax_model3)
+```
+
+
+#make residual plots of the data for ulva
+```{r}
+hist(resid(ulva_pmax_model))
+plot(resid(ulva_pmax_model) ~ fitted(ulva_pmax_model))
+qqnorm(resid(ulva_pmax_model))
+qqline(resid(ulva_pmax_model))
+```
+
+#check the performance of the model
+```{r}
+performance ::check_model(ulva_pmax_model)
+r.squaredGLMM(ulva_pmax_model)
+tab_model(ulva_pmax_model, show.intercept = TRUE, show.se = TRUE, show.stat = TRUE, show.df = TRUE, show.zeroinf = TRUE)
+plot(allEffects(ulva_pmax_model))
+```
+
+```{r}
+ulva %>% ggplot(aes(treatment_graph, pmax)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  labs(x="salinity/nitrate", y= "Day 9 Pmax (μmols electrons m-2 s-1)", title= "A", subtitle = "Ulva lactuca") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-1, 170) + stat_mean() + 
+  scale_color_manual(values = c("#295102", "#7CB950", "#BDE269")) +
+  geom_hline(yintercept=50, color = "red", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+```
+
+#summarize the means for pmax
+```{r}
+ulva %>% group_by(Treatment) %>% summarise_at(vars(pmax), list(mean = mean))
+ulva %>% group_by(Run) %>% summarise_at(vars(pmax), list(mean = mean))
+ulva %>% group_by(Treatment, RLC.Day) %>% summarise_at(vars(pmax), list(mean = mean))
+```
+
+#add growth rate from other dataset to this one and subset by species
+```{r}
+growth_rate <- read.csv("/Users/Angela/src/work/limu/algal_growth_photosynthesis/data_input/all_runs_growth_011723.csv")
+growth_rate$Species <- as.factor(growth_rate$Species)
+growth_rate$treatment <- as.factor(growth_rate$treatment)
+growth_rate$lunar.phase <- as.factor(growth_rate$lunar.phase)
+```
+
+#make a new column for weight change (difference final from initial)
+```{r}
+growth_rate$growth_rate_percent <- (growth_rate$final.weight - growth_rate$Initial.weight) / growth_rate$Initial.weight * 100
+gr_ulva <- subset(growth_rate, Species == "Ul" & treatment != 2.5)
+ulva$growth_rate <- round((gr_ulva$final.weight - gr_ulva$Initial.weight) / gr_ulva$Initial.weight * 100, digits = 2)
+ulva$lunar.phase <- (gr_ulva$lunar.phase)
+```
+
+#plot a regression between the photosynthetic independent variables of interest and growth rate
+```{r}
+ulva_growth_etr_graph <- ggplot(ulva, aes(x=pmax, y=growth_rate)) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE, aes(color = Treatment)) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Ulva lactuca Pmax vs Growth Rate", x = "Pmax (μmols electrons m-2 s-1)", 
+       y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
+ulva_growth_etr_graph
+```
+
+#_____________________________________________________________________________________________________________
+#HYPNEA 
+
+#There was no D9 RLC for hm6-4 on 11/12/21 but had to remove hm6-4 from 10/9/21 below to match growth data
+```{r}
+hypnea <- subset(all_runs_photosyn_data, Species == "hm" & RLC.Day == 9 & uid != "2021-10-09_hm6-4")
+hypnea$treatment_graph[hypnea$Treatment == 0] <- "1) 35ppt/0.5umol"
+hypnea$treatment_graph[hypnea$Treatment == 1] <- "2) 35ppt/14umol" 
+hypnea$treatment_graph[hypnea$Treatment == 2] <- "3) 28ppt/27umol" 
+hypnea$treatment_graph[hypnea$Treatment == 3] <- "5) 18ppt/53umol" 
+hypnea$treatment_graph[hypnea$Treatment == 4] <- "6) 11ppt/80umol"
+hypnea$treatment_graph[hypnea$Treatment == 2.5] <- "4) 28ppt/53umol"
+```
+
+#for Hypnea remove hm6-4 on 11/12 that had no d9 RLC (final weight 0.1017)
+# and hm6-4 on 10/9/21 because it was white and also looked dead 
+```{r}
+gr_hypnea <- subset(growth_rate, Species == "Hm" & final.weight != 0.1017 & growth_rate_percent > -87.96837)
+hypnea$growth_rate <- round((gr_hypnea$final.weight - gr_hypnea$Initial.weight) / gr_hypnea$Initial.weight * 100, digits = 2)
+```
+
+#hm1-1 on 10/12/22 and hm1-2 on 4/29/22 causing issues of influential observations
+#hm1-2 for both pmax and Ek -- leaving them in dataset because no good reason to believe not good data
+#make a histogram and residual plots of the data for hypnea
+```{r}
+hist(hypnea$pmax, main = paste("Hypnea musciformis"), col = "maroon", labels = TRUE)
+hypnea %>% ggplot(aes(pmax)) +
+  geom_histogram(binwidth=5, fill = "#7D0033", color = "black", size = 0.25, alpha = 0.85) +
+  theme_bw()
+```
+
+#run model for pmax
+```{r}
+hyp_pmax_model <- lmer(formula = pmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea)
+```
+
+```{r}
+hist(resid(hyp_pmax_model))
+plot(resid(hyp_pmax_model) ~ fitted(hyp_pmax_model))
+qqnorm(resid(hyp_pmax_model))
+qqline(resid(hyp_pmax_model))
+```
+
+#check the performance of the model
+```{r}
+performance::check_model(hyp_pmax_model)
+r.squaredGLMM(hyp_pmax_model)
+summary(hyp_pmax_model)
+tab_model(hyp_pmax_model, show.intercept = TRUE, show.se = TRUE, show.stat = TRUE, show.df = TRUE, show.zeroinf = TRUE)
+plot(allEffects(hyp_pmax_model))
+```
+
+#construct null model to perform likelihood ratio test REML must be FALSE
+```{r}
+hypnea_pmax_treatment_null <- lmer(formula = pmax ~ Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+hypnea_pmax_model2 <- lmer(formula = pmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+anova(hypnea_pmax_treatment_null, hypnea_pmax_model2)
+hypnea_pmax_temperature_null <- lmer(formula = pmax ~ Treatment + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+hypnea_pmax_model3 <- lmer(formula = pmax ~ Treatment + Temperature + (1 | Run) + (1 | Plant.ID) + (1 | RLC.Order), data = hypnea, REML = FALSE)
+anova(hypnea_pmax_temperature_null, hypnea_pmax_model3)
+```
+
+```{r}
+hypnea %>% ggplot(aes(treatment_graph, pmax)) + 
+  geom_boxplot(size=0.5) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  labs(x="Treatment", y= "Day 9 Pmax (μmols electrons m-2 s-1)", title= "B", subtitle = "Hypnea musciformis") + 
+  scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
+  ylim(-1, 170) + stat_mean() + 
+  scale_color_manual(values = c("#9C0627", "#BB589F", "#F4B4E2")) +
+  geom_hline(yintercept=50, color = "red", size = 0.5, alpha = 0.5) +
+  theme_bw() +
+  theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
+        plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+```
+
+#plot a regression between the photosynthetic independent variables of interest and growth rate
+```{r}
+hypnea_growth_etr_graph <- ggplot(hypnea, aes(x=pmax, y=growth_rate)) + 
+  geom_point(alpha = 0.5, size = 3, aes(color = Treatment), show.legend = TRUE) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Hypnea musciformis Pmax vs Growth Rate", x = "Pmax (μmols electrons m-2 s-1)", 
+       y = "growth rate (%)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor(label.y = 150)
+hypnea_growth_etr_graph
+```
+
+#summarize the means
+```{r}
+hypnea %>% group_by(Treatment) %>% summarise_at(vars(pmax), list(mean = mean))
+hypnea %>% group_by(Treatment, RLC.Day) %>% summarise_at(vars(pmax), list(mean = mean))
+```
+
+#plot a regression between pmax and ek
+```{r}
+hypnea_etr_ek_graph <- ggplot(hypnea, aes(x=pmax, y=ek.1)) + 
+  geom_point(alpha = 0.5, size = 3, show.legend = TRUE, aes(color = Treatment)) + 
+  geom_smooth(method = "lm", col = "black") + theme_bw() + 
+  labs(title = "Hypnea musciformis pmax vs Ek", x = "Pmax (μmols electrons m-2 s-1)", 
+       y = "Ek (μmols photons m-2 s-1)") + stat_regline_equation(label.x = 25, label.y = 165) + stat_cor()
+hypnea_etr_ek_graph
+```
