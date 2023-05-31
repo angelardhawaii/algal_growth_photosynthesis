@@ -105,12 +105,12 @@ anova(ulva_growth_temperature_null, ulva_growth_model3)
 #plots
 ulva %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.75, size = 3, aes(color = temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = temperature), position = "jitter", show.legend = TRUE) + 
   labs(x="salinity/nitrate", y= "8-Day Growth (%)", title= "A", subtitle = "Ulva lactuca") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-75, 200) + stat_mean() + 
   scale_color_manual(values = c("#295102", "#7CB950", "#BDE269")) +
-  geom_hline(yintercept=4.46, color = "red", size = 0.5, alpha = 0.5) +
+  geom_hline(yintercept=0, color = "red", size = 0.5, alpha = 0.5) +
   theme_bw() +
   theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
         plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
@@ -171,7 +171,7 @@ anova(hypnea_growth_temperature_null, hypnea_growth_model3)
 
 hypnea %>% ggplot(aes(treatment_graph, growth_rate_percent)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.75, size = 3, aes(color = temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = temperature), position = "jitter", show.legend = TRUE) + 
   labs(x="salinity/nitrate", y= "8-Day Growth Rate (%)", title= "B", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-75, 200) + stat_mean() + 

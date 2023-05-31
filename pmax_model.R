@@ -46,7 +46,7 @@ all_runs_photosyn_data$deltaNPQ <- as.factor(all_runs_photosyn_data$deltaNPQ)
 
 
 #toggle between the species for output. Use Day 9 for final analysis
-ulva <- subset(all_runs_photosyn_data, Species == "ul" & Treatment != 2.5)
+ulva <- subset(all_runs_photosyn_data, Species == "ul" & RLC.Day == 9 & Treatment != 2.5)
 ulva$treatment_graph[ulva$Treatment == 0] <- "1) 35ppt/0.5umol"
 ulva$treatment_graph[ulva$Treatment == 1] <- "2) 35ppt/14umol" 
 ulva$treatment_graph[ulva$Treatment == 2] <- "3) 28ppt/27umol" 
@@ -88,7 +88,7 @@ plot(allEffects(ulva_pmax_model))
 
 ulva %>% ggplot(aes(treatment_graph, pmax)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), position = "jitter", show.legend = TRUE) + 
   labs(x="salinity/nitrate", y= "Day 9 Pmax (μmols electrons m-2 s-1)", title= "A", subtitle = "Ulva lactuca") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-1, 150) + stat_mean() + 
@@ -97,6 +97,11 @@ ulva %>% ggplot(aes(treatment_graph, pmax)) +
   theme_bw() +
   theme(legend.position = c(0.90,0.90), plot.title = element_text(face = "bold", vjust = -15, hjust = 0.05), 
         plot.subtitle = element_text(face = "italic", size = 14, vjust = -20, hjust = 0.05))
+
+ulva %>% ggplot(aes(Temperature, pmax)) +
+  geom_point(alpha = 0.75, size = 3, position = "jitter", show.legend = TRUE) +
+  labs(x="temperature", y= "Day 9 Pmax (μmols electrons m-2 s-1)", title= "A", subtitle = "Ulva lactuca") +
+  scale_color_manual(values = c("#295102", "#7CB950", "#BDE269"))
 
 #summarize the means for pmax
 ulva %>% group_by(Treatment) %>% summarise_at(vars(pmax), list(mean = mean))
@@ -129,7 +134,7 @@ ulva_growth_etr_graph
 #HYPNEA 
 
 #There was no D9 RLC for hm6-4 on 11/12/21 but had to remove hm6-4 from 10/9/21 below to match growth data
-hypnea <- subset(all_runs_photosyn_data, Species == "hm" & uid != "2021-10-09_hm6-4")
+hypnea <- subset(all_runs_photosyn_data, Species == "hm" & RLC.Day == 9 & uid != "2021-10-09_hm6-4")
 hypnea$treatment_graph[hypnea$Treatment == 0] <- "1) 35ppt/0.5umol"
 hypnea$treatment_graph[hypnea$Treatment == 1] <- "2) 35ppt/14umol" 
 hypnea$treatment_graph[hypnea$Treatment == 2] <- "3) 28ppt/27umol" 
@@ -182,7 +187,7 @@ anova(hypnea_pmax_temperature_null, hypnea_pmax_model3)
 
 hypnea %>% ggplot(aes(treatment_graph, pmax)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), position = "jitter", show.legend = TRUE) + 
   labs(x="Treatment", y= "Day 9 Pmax (μmols electrons m-2 s-1)", title= "B", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-1, 150) + stat_mean() + 

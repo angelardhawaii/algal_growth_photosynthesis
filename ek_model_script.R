@@ -89,7 +89,7 @@ r.squaredGLMM(ulva_ek_model)
 #plot raw data
 ulva %>% ggplot(aes(treatment_graph, ek.1)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), position = "jitter", show.legend = FALSE) + 
   labs(x="salinity/nitrate", y= "Day 9 Ek (μmols photons m-2 s-1)", title= "C", subtitle = "Ulva lactuca") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-1, 250) + stat_mean() +
@@ -179,7 +179,7 @@ plot(allEffects(hyp_ek_model))
 #ggplot the data in a boxplot
 hypnea %>% ggplot(aes(treatment_graph, ek.1)) + 
   geom_boxplot(size=0.5) + 
-  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), show.legend = TRUE) + 
+  geom_point(alpha = 0.75, size = 3, aes(color = Temperature), position = "jitter", show.legend = FALSE) + 
   labs(x="salinity/nitrate", y= "Ek (μmols photons m-2 s-1)", title= "D", subtitle = "Hypnea musciformis") + 
   scale_x_discrete(labels = c("35ppt/0.5umolN", "35ppt/14umolN", "28ppt/27umolN", "28ppt/53umolN", "18ppt/53umolN", "11ppt/80umolN")) + 
   ylim(-1, 250) + stat_mean() + 
