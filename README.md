@@ -1,5 +1,6 @@
 # algal_growth_photosynthesis
 
+THIS IS THE ORIGINAL AND SOMEWHAT OLDER VERSION OF THE PROJECT. NEWER VERSIONS WILL SOON BE AVAILABLE
 This project contains the script that runs the final step in analysis for the PAM and growth rate data that was produced during the nutrient
 and temperature experiments on Ulva lactuca and Hypnea musciformis.
 
